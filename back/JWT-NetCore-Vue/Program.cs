@@ -1,28 +1,36 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-
-namespace JWT_NetCore_Vue
+namespace JWTNetCoreVue
 {
-  public class Program
+  using Microsoft.AspNetCore.Hosting;
+  using Microsoft.Extensions.Hosting;
+
+  /// <summary>
+  /// Classe Program.
+  /// Point d'entrée de l'application.
+  /// </summary>
+  public static class Program
   {
+
+    /// <summary>
+    /// Point d'entrée de l'application.
+    /// </summary>
+    /// <param name="args">Les arguments d'instanciation de l'application.</param>
     public static void Main(string[] args)
     {
       CreateHostBuilder(args).Build().Run();
     }
 
+    /// <summary>
+    /// Crée le host du serveur.
+    /// </summary>
+    /// <param name="args">Les arguments d'instanciation de l'application.</param>
+    /// <returns>Le host à builder.</returns>
     public static IHostBuilder CreateHostBuilder(string[] args)
     {
       return Host.CreateDefaultBuilder(args)
-            .ConfigureWebHostDefaults(webBuilder =>
-            {
-              webBuilder.UseStartup<Startup>();
-            });
+        .ConfigureWebHostDefaults(webBuilder =>
+        {
+          webBuilder.UseStartup<Startup>();
+        });
     }
   }
 }
