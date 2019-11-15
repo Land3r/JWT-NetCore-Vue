@@ -5,13 +5,14 @@
   using JWTNetCoreVue.Services;
   using Microsoft.AspNetCore.Authorization;
   using Microsoft.AspNetCore.Mvc;
-    using Microsoft.Extensions.Logging;
+  using Microsoft.Extensions.Logging;
+  using Microsoft.Extensions.Localization;
 
-    /// <summary>
-    /// Classe de controlleur UsersController.
-    /// Controlleur pour les <see cref="User">Utilisateurs</see>
-    /// </summary>
-    [Authorize]
+  /// <summary>
+  /// Classe de controlleur UsersController.
+  /// Controlleur pour les <see cref="User">Utilisateurs</see>
+  /// </summary>
+  [Authorize]
   [ApiController]
   [Route("api/[controller]")]
   public class UsersController : ControllerBase
@@ -21,19 +22,27 @@
     /// </summary>
     private readonly IUserService _userService;
 
+    /// <summary>
+    /// Le Logger utilisé par le controller.
+    /// </summary>
     private readonly ILogger<UsersController> _logger;
+
+    /// <summary>
+    /// Les ressources de langue.
+    /// </summary>
+    private readonly IStringLocalizer<UsersController> _localizer;
 
     /// <summary>
     /// Instancie une nouvelle instance de <see cref="UsersController"/>.
     /// </summary>
     /// <param name="userService">Le <see cref="IUserService"/>.</param>
     public UsersController(IUserService userService,
-      ILogger<UsersController> logger)
+      ILogger<UsersController> logger,
+      IStringLocalizer<UsersController> localizer)
     {
       _userService = userService;
       _logger = logger;
-      _logger.LogInformation("Index page says hello");
-
+      _localizer = localizer;
     }
 
     /// <summary>
@@ -49,7 +58,8 @@
 
       if (user == null)
       {
-        return BadRequest(new { message = "Username or password is incorrect" });
+        _logger.LogWarning(Resources.);
+        return BadRequest(new { message = "Username or password is incorrect." });
       }
       else
       {
