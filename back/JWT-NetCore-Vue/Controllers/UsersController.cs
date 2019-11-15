@@ -5,12 +5,13 @@
   using JWTNetCoreVue.Services;
   using Microsoft.AspNetCore.Authorization;
   using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Logging;
 
-  /// <summary>
-  /// Classe de controlleur UsersController.
-  /// Controlleur pour les <see cref="User">Utilisateurs</see>
-  /// </summary>
-  [Authorize]
+    /// <summary>
+    /// Classe de controlleur UsersController.
+    /// Controlleur pour les <see cref="User">Utilisateurs</see>
+    /// </summary>
+    [Authorize]
   [ApiController]
   [Route("api/[controller]")]
   public class UsersController : ControllerBase
@@ -20,13 +21,19 @@
     /// </summary>
     private readonly IUserService _userService;
 
+    private readonly ILogger<UsersController> _logger;
+
     /// <summary>
     /// Instancie une nouvelle instance de <see cref="UsersController"/>.
     /// </summary>
     /// <param name="userService">Le <see cref="IUserService"/>.</param>
-    public UsersController(IUserService userService)
+    public UsersController(IUserService userService,
+      ILogger<UsersController> logger)
     {
       _userService = userService;
+      _logger = logger;
+      _logger.LogInformation("Index page says hello");
+
     }
 
     /// <summary>
@@ -48,6 +55,14 @@
       {
         return Ok(user);
       }
+    }
+
+    [AllowAnonymous]
+    [HttpGet("test")]
+    public IActionResult Test()
+    {
+      _logger.LogCritical("Index page says hello");
+      return Ok();
     }
 
     /// <summary>
