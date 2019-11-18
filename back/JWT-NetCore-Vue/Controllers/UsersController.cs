@@ -71,6 +71,27 @@
     }
 
     /// <summary>
+    /// Authentifie un <see cref="User">Utilisateur</see>
+    /// </summary>
+    /// <param name="model">Le <see cref="UserAuthenticateModel"/> utilisé pour authentifier <see cref="User">Utilisateur</see></param>
+    /// <returns>L'<see cref="User">Utilisateur</see> si l'authentification est ok.</returns>
+    [AllowAnonymous]
+    [HttpPost("a")]
+    public IActionResult Authenticate2()
+    {
+      var user = "test";
+
+      if (user == null)
+      {
+        return BadRequest(new { message = _localizer["LoginFailed"].Value });
+      }
+      else
+      {
+        return Ok(user);
+      }
+    }
+
+    /// <summary>
     /// Obtient les informations de l'utilisateur en cours.
     /// </summary>
     /// <returns>L'<see cref="User">Utilisateur</see> en cours.</returns>

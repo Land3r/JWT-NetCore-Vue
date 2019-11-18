@@ -23,7 +23,6 @@ namespace JWTNetCoreVue
       try
       {
         logger.Debug("Application Initialisation.");
-        logger.Error("Test");
         CreateHostBuilder(args).Build().Run();
       }
       catch (Exception exception)
