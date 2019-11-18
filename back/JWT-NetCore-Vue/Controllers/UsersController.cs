@@ -1,5 +1,6 @@
 ﻿namespace JWTNetCoreVue.Controllers
 {
+  using System.Globalization;
   using JWTNetCoreVue.Models;
   using JWTNetCoreVue.Entities;
   using JWTNetCoreVue.Services;
@@ -54,31 +55,25 @@
     [HttpPost("auth")]
     public IActionResult Authenticate([FromBody]UserAuthenticateModel model)
     {
+      _logger.LogDebug(string.Format(CultureInfo.InvariantCulture, _localizer["LogLoginTry"].Value, model?.Username));
       var user = _userService.Authenticate(model);
 
       if (user == null)
       {
-        _logger.LogWarning(Resources.);
-        return BadRequest(new { message = "Username or password is incorrect." });
+        _logger.LogInformation(string.Format(CultureInfo.InvariantCulture, _localizer["LogLoginFailed"].Value, model?.Username));
+        return BadRequest(new { message = _localizer["LoginFailed"].Value });
       }
       else
       {
+        _logger.LogInformation(string.Format(CultureInfo.InvariantCulture, _localizer["LogLoginSuccess"].Value, model?.Username));
         return Ok(user);
       }
-    }
-
-    [AllowAnonymous]
-    [HttpGet("test")]
-    public IActionResult Test()
-    {
-      _logger.LogCritical("Index page says hello");
-      return Ok();
     }
 
     /// <summary>
     /// Obtient les informations de l'utilisateur en cours.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>L'<see cref="User">Utilisateur</see> en cours.</returns>
     [HttpGet]
     public IActionResult Get()
     {

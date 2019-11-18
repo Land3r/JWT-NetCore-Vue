@@ -6,7 +6,8 @@ namespace JWTNetCoreVue
   using Microsoft.AspNetCore.Authentication.JwtBearer;
   using Microsoft.AspNetCore.Builder;
   using Microsoft.AspNetCore.Hosting;
-  using Microsoft.Extensions.Configuration;
+    using Microsoft.AspNetCore.Mvc.Razor;
+    using Microsoft.Extensions.Configuration;
   using Microsoft.Extensions.DependencyInjection;
   using Microsoft.Extensions.Hosting;
   using Microsoft.IdentityModel.Tokens;
@@ -35,6 +36,9 @@ namespace JWTNetCoreVue
     public void ConfigureServices(IServiceCollection services)
     {
       services.AddLocalization(options => options.ResourcesPath = "Resources");
+      services.AddMvc()
+        .AddViewLocalization(options => options.ResourcesPath = "Resources")
+        .AddDataAnnotationsLocalization();
 
       services.AddCors();
       services.AddControllers();

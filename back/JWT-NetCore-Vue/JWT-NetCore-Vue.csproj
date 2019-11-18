@@ -3,6 +3,10 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <RootNamespace>JWTNetCoreVue</RootNamespace>
+    <PackageId>JWTNetCoreVue</PackageId>
+    <Authors>JWTNetCoreVue</Authors>
+    <Product>JWTNetCoreVue</Product>
+    <AssemblyName>JWTNetCoreVue</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

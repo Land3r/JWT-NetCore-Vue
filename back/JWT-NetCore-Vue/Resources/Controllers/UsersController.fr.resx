@@ -118,15 +118,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="LoginFailed" xml:space="preserve">
-    <value>Username or password doesn't match.</value>
+    <value>Le nom d'utilisateur ou le mot de passe ne correspondent pas.</value>
   </data>
   <data name="LogLoginFailed" xml:space="preserve">
-    <value>User {0} failed login.</value>
+    <value>Utilisateur {0} n'a pas pu être authentifié.</value>
   </data>
   <data name="LogLoginSuccess" xml:space="preserve">
-    <value>User {0} successfully authenticated.</value>
+    <value>Utilisateur {0} authentifié avec succès.</value>
   </data>
   <data name="LogLoginTry" xml:space="preserve">
-    <value>Trying to authenticate user {0}.</value>
+    <value>Tentative d'authentification pour l'utilisateur {0}.</value>
   </data>
 </root>
