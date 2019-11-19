@@ -1,17 +1,18 @@
 namespace JWTNetCoreVue
 {
   using System.Text;
-  using JWTNetCoreVue.Services;
+    using JWTNetCoreVue.Security;
+    using JWTNetCoreVue.Services;
   using JWTNetCoreVue.Settings;
   using Microsoft.AspNetCore.Authentication.JwtBearer;
   using Microsoft.AspNetCore.Builder;
   using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Mvc.Razor;
-    using Microsoft.Extensions.Configuration;
+  using Microsoft.AspNetCore.Mvc.Razor;
+  using Microsoft.Extensions.Configuration;
   using Microsoft.Extensions.DependencyInjection;
   using Microsoft.Extensions.Hosting;
   using Microsoft.IdentityModel.Tokens;
-  
+
   /// <summary>
   /// Classe Startup
   /// Classe permettant la configuration du projet.
@@ -35,12 +36,13 @@ namespace JWTNetCoreVue
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
+      CorsConfiguration.ConfigureServices(services);
+
       services.AddLocalization(options => options.ResourcesPath = "Resources");
       services.AddMvc()
         .AddViewLocalization(options => options.ResourcesPath = "Resources")
         .AddDataAnnotationsLocalization();
 
-      services.AddCors();
       services.AddControllers();
 
       // configure strongly typed settings objects
@@ -75,15 +77,11 @@ namespace JWTNetCoreVue
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
+      CorsConfiguration.Configure(app, env);
+
       if (env.IsDevelopment())
       {
         app.UseDeveloperExceptionPage();
-
-        // Cors policy
-        app.UseCors(x => x
-          .AllowAnyOrigin()
-          .AllowAnyMethod()
-          .AllowAnyHeader());
       }
       else
       {
