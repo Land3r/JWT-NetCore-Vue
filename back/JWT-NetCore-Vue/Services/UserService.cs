@@ -74,7 +74,7 @@
             new Claim(ClaimTypes.Name, user.Id.ToString()),
             new Claim(ClaimTypes.Email, user.Email.ToString(CultureInfo.InvariantCulture))
           }),
-          Expires = DateTime.UtcNow.AddDays(7),
+          Expires = DateTime.UtcNow.AddDays(_appSettings.JWT.DurationInDays),
           SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
         SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);

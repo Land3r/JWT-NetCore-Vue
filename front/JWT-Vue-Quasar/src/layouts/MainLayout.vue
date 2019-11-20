@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
+  <q-layout view="hHh lpR fff">
     <q-header elevated>
       <q-toolbar>
         <q-btn
@@ -92,7 +92,7 @@
 
 <script>
 export default {
-  name: 'MyLayout',
+  name: 'MainLayout',
 
   data () {
     return {
