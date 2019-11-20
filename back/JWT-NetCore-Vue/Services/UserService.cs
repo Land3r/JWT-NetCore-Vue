@@ -25,7 +25,7 @@
     // FIXME: En production, ne stockez JAMAIS les mots de passes en clair. Utilisez une fonction de hashage ou d'encryption.
     private readonly List<User> _users = new List<User>
     {
-      new User { Id = new Guid(), FirstName = "Test", LastName = "User", Username = "test", Password = "test" }
+      new User { Id = new Guid(), FirstName = "Test", LastName = "User", Username = "test", Password = "test", Email="ngordat@github.com" }
     };
 
     /// <summary>
