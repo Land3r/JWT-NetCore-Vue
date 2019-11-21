@@ -1,5 +1,23 @@
 // app global css in SCSS form
 
-.semi-transparent {
-  background:rgba(255,255,255,0.90);
+$width_low_res: 480px;
+
+.app- {
+  &popout {
+    min-width: 30%;
+    max-width: 50%;
+  }
+  &semi-transparent {
+    background:rgba(255,255,255,0.85);
+  }
+}
+
+// Low resolution
+@media (max-width:#{$width_low_res})
+{
+  .app- {
+    &popout {
+      min-width: 90%;
+    }
+  }
 }

@@ -1,3 +1,5 @@
+const path = require('path')
+
 // Configuration for your app
 // https://quasar.dev/quasar-cli/quasar-conf-js
 
@@ -8,7 +10,8 @@ module.exports = function (ctx) {
     // https://quasar.dev/quasar-cli/cli-documentation/boot-files
     boot: [
       'axios',
-      'i18n'
+      'i18n',
+      'notify-defaults'
     ],
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
@@ -47,7 +50,9 @@ module.exports = function (ctx) {
       directives: [],
 
       // Quasar plugins
-      plugins: []
+      plugins: [
+        'Notify'
+      ]
     },
 
     // https://quasar.dev/quasar-cli/cli-documentation/supporting-ie
@@ -57,9 +62,9 @@ module.exports = function (ctx) {
     build: {
       scopeHoisting: true,
       // vueRouterMode: 'history',
-      // showProgress: false,
-      // gzip: true,
-      // analyze: true,
+      showProgress: true,
+      gzip: true,
+      analyze: true,
       // preloadChunks: false,
       // extractCSS: false,
 
@@ -74,6 +79,18 @@ module.exports = function (ctx) {
             formatter: require('eslint').CLIEngine.getFormatter('stylish')
           }
         })
+
+        cfg.resolve.alias = {
+          ...cfg.resolve.alias,
+          'data': path.resolve(__dirname, 'src/data'),
+          'domain': path.resolve(__dirname, 'src/domain'),
+          'i18n': path.resolve(__dirname, 'src/i18n'),
+          'layouts': path.resolve(__dirname, 'src/layouts'),
+          'pages': path.resolve(__dirname, 'src/pages'),
+          'router': path.resolve(__dirname, 'src/router'),
+          'services': path.resolve(__dirname, 'src/services'),
+          'store': path.resolve(__dirname, 'src/store')
+        }
       }
     },
 
