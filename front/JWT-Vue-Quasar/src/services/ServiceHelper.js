@@ -34,7 +34,7 @@ export function handleError (error) {
     return Promise.reject(result)
   } else {
     // Something happened in setting up the request that triggered an Error
-    console.log('Error', error.message)
+    console.error('Network error', error.message)
     const result = {
       ok: false,
       status: null,

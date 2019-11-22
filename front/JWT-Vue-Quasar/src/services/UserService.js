@@ -5,7 +5,8 @@ import { handleResponse, handleError } from 'services/ServiceHelper'
 import { API, getApiEndpoint } from 'data/backend'
 
 const endpoints = {
-  'AUTH': '/auth'
+  'AUTH': '/auth',
+  'GET': ''
 }
 
 const localStorageKeys = {
@@ -33,7 +34,24 @@ export default class UserService {
       }
     }
 
-    console.log(requestOptions)
+    return axios(requestOptions)
+      .then(function (response) {
+        return handleResponse(response)
+      })
+      .catch(function (error) {
+        return handleError(error)
+      })
+  }
+
+  /**
+   * Gets the current authenticated user.
+   */
+  getCurrentUser () {
+    const requestOptions = {
+      method: 'get',
+      headers: { 'Content-Type': 'application/json' },
+      url: getApiEndpoint(API.USER + endpoints.GET)
+    }
 
     return axios(requestOptions)
       .then(function (response) {
@@ -50,6 +68,9 @@ export default class UserService {
   disconnect () {
     LocalStorage.remove(localStorageKeys.user)
     LocalStorage.remove(localStorageKeys.token)
+
+    // Removes the token
+    axios.defaults.headers.common['Authorization'] = null
   }
 
   /**
@@ -60,6 +81,9 @@ export default class UserService {
     const { token, password, ...otherUser } = user
     LocalStorage.set(localStorageKeys.user, { ...otherUser })
     LocalStorage.set(localStorageKeys.token, token)
+
+    // Sets the token in axios calls.
+    axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
   }
 
   /**
@@ -71,5 +95,13 @@ export default class UserService {
     } else {
       return false
     }
+  }
+
+  getUser () {
+    return LocalStorage.getItem(localStorageKeys.user)
+  }
+
+  getToken () {
+    return LocalStorage.getItem(localStorageKeys.token)
   }
 }

@@ -1,16 +1,21 @@
+import common from './common'
+
+import mainlayout from './layouts/mainlayout'
+
+import indexpage from './pages/indexpage'
+import loginpage from './pages/user/loginpage'
+
 export default {
-  // Generics
-  btn: {
-    save: 'Save',
-    apply: 'Apply',
-    ok: 'Ok',
-    edit: 'Edit',
-    cancel: 'Cancel',
-    confirm: 'Confirm',
-    delete: 'Delete',
-    ignore: 'Ignore',
-    back: 'Back',
-    next: 'Next'
+  ...common,
+
+  mainlayout: {
+    ...mainlayout
+  },
+  indexpage: {
+    ...indexpage
+  },
+  loginpage: {
+    ...loginpage
   },
   loginform: {
     section: {
@@ -72,14 +77,6 @@ export default {
       email2: 'Email field should be a valid email and match the previous email filled.',
       password: 'Password field should be filled.',
       password2: 'Password field should be filled and match the previous password filled.'
-    }
-  },
-  loginpage: {
-    error: {
-      loginfailure: 'Your credentials are not valid !'
-    },
-    success: {
-      loginsuccess: 'You are now logged in.'
     }
   },
   createaccountpage: {

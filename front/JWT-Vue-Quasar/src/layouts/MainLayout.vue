@@ -27,17 +27,14 @@
             >
               <q-list style="min-width: 100px">
                 <q-item clickable>
-                  <q-item-section>Having fun</q-item-section>
-                </q-item>
-                <q-item clickable>
-                  <q-item-section>Crazy for transitions</q-item-section>
+                  <q-item-section>{{$t('mainlayout.user.nothing')}}</q-item-section>
                 </q-item>
                 <q-separator />
                 <q-item clickable @click="doDisconnect">
                   <q-item-section avatar>
                     <q-icon color="primary" name="close" />
                   </q-item-section>
-                  <q-item-section>Disconnect</q-item-section>
+                  <q-item-section>{{$t('mainlayout.user.disconnect')}}</q-item-section>
                 </q-item>
               </q-list>
             </q-menu>

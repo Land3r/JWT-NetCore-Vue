@@ -26,6 +26,7 @@ export default function (/* { store, ssrContext } */) {
   const userService = new UserService()
 
   Router.beforeEach((to, from, next) => {
+    // If user hits a page that requires auth, redirects him to the login page.
     if (to.matched.some(record => record.meta.requiresAuth)) {
       if (!userService.isConnected()) {
         next({
