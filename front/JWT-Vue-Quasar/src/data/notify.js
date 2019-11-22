@@ -4,7 +4,7 @@ export const NotifySuccess = {
   message: null,
   html: false,
   icon: 'done',
-  position: 'bottom'
+  position: 'bottom-right'
 }
 
 export const NotifyFailure = {
