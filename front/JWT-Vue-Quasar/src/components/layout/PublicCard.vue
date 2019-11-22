@@ -1,8 +1,7 @@
 <template>
-  <q-slide-transition appear>
-    <q-card class="app-semi-transparent app-popout" transition-show="slide-down" transition-hide="slide-up">
-    </q-card>
-  </q-slide-transition>
+  <q-card class="app-transparent-85 app-popout" transition-show="slide-down" transition-hide="slide-up">
+    <slot></slot>
+  </q-card>
 </template>
 
 <script>

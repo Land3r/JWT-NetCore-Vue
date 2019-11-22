@@ -15,7 +15,8 @@
     "@quasar/extras": "^1.0.0",
     "axios": "^0.19.0",
     "quasar": "^1.0.0",
-    "vue-i18n": "^8.0.0"
+    "vue-i18n": "^8.0.0",
+    "xss": "^1.0.6"
   },
   "devDependencies": {
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.4.4",
@@ -35,13 +36,5 @@
   },
   "browserslist": [
     "last 1 version, not dead, ie >= 11"
-  ],
-  "_moduleAliases": {
-    "@components": "src/components",
-    "@data": "src/data",
-    "@layout": "src/layouts",
-    "@pages": "src/pages",
-    "@services": "src/services",
-    "@store": "src/store"
-  }
+  ]
 }

@@ -1,14 +1,50 @@
 // app global css in SCSS form
-
 $width_low_res: 480px;
 
 .app- {
+  // Public popout for login/passwordlost, etc.
   &popout {
     min-width: 30%;
     max-width: 50%;
   }
-  &semi-transparent {
-    background:rgba(255,255,255,0.85);
+
+  // Adds background transparency.
+  @for $i from 1 to 99 {
+    &transparent-#{$i} {
+      background:rgba(255,255,255,$i * 0.01);
+    }
+  }
+
+  // For <hr />
+  &strike {
+    display: block;
+    text-align: center;
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 1em 0em 1em 0em;
+
+    & > span {
+      position: relative;
+      display: inline-block;
+    }
+
+    & > span:before,
+    & > span:after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 9999px;
+      height: 1px;
+      background: rgba(0, 0, 0, 0.6);
+    }
+    & > span:before {
+      right: 100%;
+      margin-right: 15px;
+    }
+    & > span:after {
+      left: 100%;
+      margin-left: 15px;
+    }
   }
 }
 

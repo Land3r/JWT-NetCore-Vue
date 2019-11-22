@@ -1,6 +1,6 @@
 <template>
   <q-layout view="hHh lpR fff">
-    <q-header elevated>
+    <q-header elevated class="app-header">
       <q-toolbar>
         <q-btn
           flat
@@ -12,10 +12,37 @@
         />
 
         <q-toolbar-title>
-          Quasar App
+          {{title}}
         </q-toolbar-title>
 
         <div>Quasar v{{ $q.version }}</div>
+        <div>
+          <q-btn flat>
+            <q-avatar>
+              <q-icon name="perm_identity" />
+            </q-avatar>
+            <q-menu
+              transition-show="jump-down"
+              transition-hide="jump-up"
+            >
+              <q-list style="min-width: 100px">
+                <q-item clickable>
+                  <q-item-section>Having fun</q-item-section>
+                </q-item>
+                <q-item clickable>
+                  <q-item-section>Crazy for transitions</q-item-section>
+                </q-item>
+                <q-separator />
+                <q-item clickable @click="doDisconnect">
+                  <q-item-section avatar>
+                    <q-icon color="primary" name="close" />
+                  </q-item-section>
+                  <q-item-section>Disconnect</q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
+          </q-btn>
+        </div>
       </q-toolbar>
     </q-header>
 
@@ -23,7 +50,7 @@
       v-model="leftDrawerOpen"
       show-if-above
       bordered
-      content-class="bg-grey-2"
+      content-class="app-menu"
     >
       <q-list>
         <q-item-label header>Essential Links</q-item-label>
@@ -91,13 +118,39 @@
 </template>
 
 <script>
+import UserService from 'services/UserService'
+
 export default {
   name: 'MainLayout',
-
   data () {
     return {
       leftDrawerOpen: false
     }
+  },
+  computed: {
+    title: function () {
+      return process.env.WEBSITE_NAME
+    }
+  },
+  methods: {
+    doDisconnect: function () {
+      var userService = new UserService()
+      userService.disconnect()
+      this.$router.push('/login')
+    }
   }
 }
 </script>
+
+<style>
+.app-header {
+  background: linear-gradient(145deg,#027be3 11%,#014a88 75%);
+}
+
+.app-menu {
+  background-image: linear-gradient(rgba(245, 245, 245, 1), rgba(245, 245, 245, 0.75)), url("~assets/space.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+</style>

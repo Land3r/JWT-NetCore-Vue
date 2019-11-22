@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 import routes from './routes'
+import UserService from 'services/UserService'
 
 Vue.use(VueRouter)
 
@@ -22,5 +23,21 @@ export default function (/* { store, ssrContext } */) {
     base: process.env.VUE_ROUTER_BASE
   })
 
+  const userService = new UserService()
+
+  Router.beforeEach((to, from, next) => {
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+      if (!userService.isConnected()) {
+        next({
+          path: '/login',
+          params: { nextUrl: to.fullPath }
+        })
+      } else {
+        next()
+      }
+    } else {
+      next()
+    }
+  })
   return Router
 }

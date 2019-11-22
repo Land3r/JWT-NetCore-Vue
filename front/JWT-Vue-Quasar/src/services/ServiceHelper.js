@@ -13,7 +13,7 @@ export function handleResponse (response) {
 export function handleError (error) {
   if (error.response) {
     // The request was made and the server responded with a status code
-    // that falls out of the range of 2xx
+    //   that falls out of the range of 2xx
     const result = {
       ok: false,
       status: error.response.status,
