@@ -2,7 +2,7 @@
 const routes = [
   {
     name: '',
-    path: '/',
+    path: '/user',
     component: () => import('layouts/EmptyLayout.vue'),
     meta: {
       requiresAuth: false
@@ -14,23 +14,20 @@ const routes = [
         component: () => import('pages/user/LoginPage.vue')
       },
       {
-        // Empty rule that requires auth. Allow for auto redirection to login page.
-        name: 'Moc',
-        path: '',
-        meta: {
-          requiresAuth: true
-        }
+        path: '/',
+        redirect: { name: 'LoginPage' }
       }
     ]
   },
   {
-    path: '/user',
+    path: '/',
     component: () => import('layouts/MainLayout.vue'),
     meta: {
       requiresAuth: true
     },
     children: [
       {
+        name: 'IndexPage',
         path: '',
         component: () => import('pages/Index.vue')
       }

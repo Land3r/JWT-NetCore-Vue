@@ -65,7 +65,7 @@ export default {
       const token = userservice.getToken()
 
       userservice.connect({ ...user, token: token, password: null })
-      this.$router.push('/user')
+      this.$router.push({ name: 'IndexPage' })
     }
   },
   computed: {
@@ -82,7 +82,7 @@ export default {
         userservice.connect(response)
         this.isLoading = false
         this.$q.notify({ ...NotifySuccess, message: this.$t('loginpage.success.loginsuccess', { username: xss(response.username) }), html: true })
-        this.$router.push('/user')
+        this.$router.push({ name: 'IndexPage' })
       }).catch((response) => {
         this.isLoading = false
         this.$q.notify({ ...NotifyFailure, message: this.$t('loginpage.error.loginfailure') })

@@ -133,7 +133,7 @@ export default {
     doDisconnect: function () {
       var userService = new UserService()
       userService.disconnect()
-      this.$router.push('/login')
+      this.$router.push({ name: 'LoginPage' })
     }
   }
 }
