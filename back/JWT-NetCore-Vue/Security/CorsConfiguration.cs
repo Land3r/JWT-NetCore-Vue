@@ -66,7 +66,7 @@ namespace JWTNetCoreVue.Security
         options.AddPolicy(CorsPolicyFrontend,
           builder =>
           {
-            builder.WithOrigins("https://www.ngordat.net", "https://*.ngordat.net")
+            builder.WithOrigins("http://*.ngordat.net", "https://*.ngordat.net")
               .AllowAnyHeader()
               .WithMethods(HttpMethods.Get, HttpMethods.Post, HttpMethods.Put, HttpMethods.Delete, HttpMethods.Options)
               .AllowCredentials()

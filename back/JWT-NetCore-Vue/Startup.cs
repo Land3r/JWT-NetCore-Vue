@@ -1,12 +1,13 @@
 namespace JWTNetCoreVue
 {
   using System.Text;
-    using JWTNetCoreVue.Security;
-    using JWTNetCoreVue.Services;
+  using JWTNetCoreVue.Security;
+  using JWTNetCoreVue.Services;
   using JWTNetCoreVue.Settings;
   using Microsoft.AspNetCore.Authentication.JwtBearer;
   using Microsoft.AspNetCore.Builder;
   using Microsoft.AspNetCore.Hosting;
+  using Microsoft.AspNetCore.HttpOverrides;
   using Microsoft.AspNetCore.Mvc.Razor;
   using Microsoft.Extensions.Configuration;
   using Microsoft.Extensions.DependencyInjection;
@@ -89,6 +90,13 @@ namespace JWTNetCoreVue
         // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
         app.UseHsts();
       }
+
+      // Necessary for production build.
+      // Allows the application to be delivered through a reverse proxy setup (with nginx and kestrel typically).
+      app.UseForwardedHeaders(new ForwardedHeadersOptions
+      {
+        ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+      });
 
       app.UseHttpsRedirection();
       app.UseStaticFiles();
