@@ -10,5 +10,9 @@ export default {
     ignore: 'Ignorer',
     back: 'Précédent',
     next: 'Suivant'
+  },
+  network: {
+    noresponse: 'Impossible de communiquer avec le backend.',
+    errorresponse: 'Erreur réseau: HTTP {http}: {message}.'
   }
 }
