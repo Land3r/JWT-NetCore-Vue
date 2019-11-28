@@ -7,7 +7,7 @@
   /// Interface IUSerService.
   /// Interface pour le service des utilisateurs.
   /// </summary>
-  public interface IUserService
+  public interface IUserService : ICrudService<User>
   {
     /// <summary>
     /// Authentifie un <see cref="User"/>, basé sur le <see cref="UserAuthenticateModel"/> fourni.
@@ -17,9 +17,10 @@
     User Authenticate(UserAuthenticateModel model);
 
     /// <summary>
-    /// Obtient l'<see cref="User">Utilisateur</see> authentifié.
+    /// Obtient un <see cref="User"/>, basé sur le username fourni.
     /// </summary>
-    /// <returns>L'<see cref="User">Utilisateur</see> en cours.</returns>
-    User GetCurrentUser();
+    /// <param name="username">Le nom d'utilisateur à utiliser pour authentifier l'<see cref="Utilisateur"/>.</param>
+    /// <returns>L'<see cref="User">Utilisateur</see>.</returns>
+    User Get(string username);
   }
 }

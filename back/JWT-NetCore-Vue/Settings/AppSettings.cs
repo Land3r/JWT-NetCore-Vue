@@ -10,5 +10,10 @@
     /// Obtient ou définit la configuration utilisée pour configurer l'authentification JWT.
     /// </summary>
     public JWTSettings JWT { get; set; }
+
+    /// <summary>
+    /// Obtient ou définir la configuration utilisée pour configurer la connection à la base de données.
+    /// </summary>
+    public MongoDbSettings MongoDbSettings { get; set; }
   }
 }

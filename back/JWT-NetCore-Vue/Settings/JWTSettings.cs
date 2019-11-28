@@ -2,7 +2,7 @@
 {
   /// <summary>
   /// Classe JWTSettings.
-  /// Classe permettant d'otenir la configuration utilisée pour configurer l'authentification JWT.
+  /// Classe permettant d'obtenir la configuration utilisée pour configurer l'authentification JWT.
   /// </summary>
   public class JWTSettings
   {

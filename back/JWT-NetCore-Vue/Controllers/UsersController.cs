@@ -77,7 +77,8 @@
     [HttpGet]
     public IActionResult Get()
     {
-      User user = _userService.GetCurrentUser();
+
+      User user = _userService.Get("test");
       return Ok(user);
     }
   }
