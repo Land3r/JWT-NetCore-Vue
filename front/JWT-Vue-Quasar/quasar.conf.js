@@ -11,6 +11,7 @@ module.exports = function (ctx) {
     boot: [
       'axios',
       'i18n',
+      'addressbar-color',
       'notify-defaults'
     ],
 
@@ -51,6 +52,7 @@ module.exports = function (ctx) {
 
       // Quasar plugins
       plugins: [
+        'AddressbarColor',
         'LocalStorage',
         'Notify'
       ]
