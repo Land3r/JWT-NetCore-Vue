@@ -4,6 +4,7 @@ import mainlayout from './layouts/mainlayout'
 
 import indexpage from './pages/indexpage'
 import loginpage from './pages/user/loginpage'
+import forgotpasswordpage from './pages/user/forgotpasswordpage'
 
 export default {
   ...common,
@@ -16,6 +17,9 @@ export default {
   },
   loginpage: {
     ...loginpage
+  },
+  forgotpasswordpage: {
+    ...forgotpasswordpage
   },
   loginform: {
     section: {

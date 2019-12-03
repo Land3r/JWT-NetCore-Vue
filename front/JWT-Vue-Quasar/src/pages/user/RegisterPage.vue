@@ -1,20 +1,22 @@
+
 <template>
   <q-page class="flex flex-center">
     <app-transition>
       <app-publiccard>
         <q-card-section class="bg-primary text-white">
-          <div class="text-h6"><q-icon name="perm_identity" size="md" left/>{{$t('loginpage.title')}}</div>
+          <div class="text-h6"><q-icon name="perm_identity" size="md" left/>{{$t('registerpage.title')}}</div>
         </q-card-section>
+
         <q-separator />
         <q-card-section>
           <q-form @submit="doLogin">
-            <q-input color="primary" type="text" v-model="form.username" :label="$t('loginpage.form.username')" clearable clear-icon="close">
+            <q-input color="primary" type="text" v-model="form.username" :label="$t('registerpage.form.username')" clearable clear-icon="close">
               <template v-slot:prepend>
                 <q-icon name="perm_identity" />
               </template>
             </q-input>
-            <q-space />
-            <q-input color="primary" v-model="form.password" :label="$t('loginpage.form.password')" :type="showPassword ? 'text' : 'password'" >
+            <br />
+            <q-input color="primary" v-model="form.password" :label="$t('registerpage.form.password')" :type="showPassword ? 'text' : 'password'" >
               <template v-slot:append>
                 <q-icon
                   :name="showPassword ? 'visibility_off' : 'visibility'"
@@ -23,14 +25,9 @@
                 />
               </template>
             </q-input>
-            <br/>
-            <q-btn class="bg-primary text-white full-width" type="submit" @click="doLogin" :loading="isLoading" :disable="isLoading || !isFormValid">{{$t('loginpage.btn.login')}}</q-btn>
+            <br />
+            <q-btn class="bg-primary text-white full-width" type="submit" @click="doLogin" :loading="isLoading" :disable="isLoading || !isFormValid">{{$t('registerpage.btn.login')}}</q-btn>
           </q-form>
-          <div class="text-center q-my-xs text-uppercase">{{$t('loginpage.text.or')}}</div>
-          <q-btn class="bg-secondary text-white full-width" :to="{ name: 'RegisterPage' }">{{$t('loginpage.btn.register')}}</q-btn>
-          <div class="text-center q-mt-md q-mb-xs">
-            <router-link :to="{ name: 'ForgotPasswordPage' }">{{$t('loginpage.btn.forgotpassword')}}</router-link>
-          </div>
         </q-card-section>
       </app-publiccard>
     </app-transition>
@@ -46,7 +43,7 @@ import PublicCard from 'components/layout/PublicCard'
 import Transition from 'components/common/presentation/Transition'
 
 export default {
-  name: 'LoginPage',
+  name: 'RegisterPage',
   components: {
     'app-transition': Transition,
     'app-publiccard': PublicCard

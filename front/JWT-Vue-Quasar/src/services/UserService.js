@@ -6,6 +6,8 @@ import { API, getApiEndpoint } from 'data/backend'
 
 const endpoints = {
   'AUTH': '/auth',
+  'RESETPASSWORD': '/resetpassword',
+  'REGISTER': '/register',
   'GET': ''
 }
 
@@ -103,5 +105,61 @@ export default class UserService {
 
   getToken () {
     return LocalStorage.getItem(localStorageKeys.token)
+  }
+
+  /**
+   * Reset a user password.
+   * @param {string} username The user's username.
+   * @param {string} email The user's email.
+   */
+  doResetPassword (username, email) {
+    const requestOptions = {
+      method: 'post',
+      headers: { 'Content-Type': 'application/json' },
+      url: getApiEndpoint(API.USER + endpoints.RESETPASSWORD),
+      data: {
+        username: username,
+        email: email
+      }
+    }
+
+    return axios(requestOptions)
+      .then(function (response) {
+        return handleResponse(response)
+      })
+      .catch(function (error) {
+        return handleError(error)
+      })
+  }
+
+  /**
+   * Register a new user.
+   * @param {string} firstname The user's firstname.
+   * @param {string} lastname The user's lastname.
+   * @param {string} username The user's username.
+   * @param {string} email The user's email.
+   * @param {string} password The user's password.
+   */
+  doRegister (firstname, lastname, username, email, password) {
+    const requestOptions = {
+      method: 'post',
+      headers: { 'Content-Type': 'application/json' },
+      url: getApiEndpoint(API.USER + endpoints.REGISTER),
+      data: {
+        firstname: firstname,
+        lastname: lastname,
+        username: username,
+        email: email,
+        password: password
+      }
+    }
+
+    return axios(requestOptions)
+      .then(function (response) {
+        return handleResponse(response)
+      })
+      .catch(function (error) {
+        return handleError(error)
+      })
   }
 }
