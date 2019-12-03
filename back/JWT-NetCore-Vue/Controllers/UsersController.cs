@@ -8,12 +8,13 @@
   using Microsoft.AspNetCore.Mvc;
   using Microsoft.Extensions.Logging;
   using Microsoft.Extensions.Localization;
+    using System;
 
-  /// <summary>
-  /// Classe de controlleur UsersController.
-  /// Controlleur pour les <see cref="User">Utilisateurs</see>
-  /// </summary>
-  [Authorize]
+    /// <summary>
+    /// Classe de controlleur UsersController.
+    /// Controlleur pour les <see cref="User">Utilisateurs</see>
+    /// </summary>
+    [Authorize]
   [ApiController]
   [Route("api/[controller]")]
   public class UsersController : ControllerBase
@@ -75,7 +76,20 @@
     public IActionResult Register([FromBody]User model)
     {
       _logger.LogDebug(string.Format(CultureInfo.InvariantCulture, _localizer["LogRegisterTry"].Value));
-      var user = _userService.Register(model);
+
+      User user = null;
+      try
+      {
+        user = _userService.Register(model);
+      }
+      catch (Exception ex)
+      {
+        if (ex.GetType() == typeof(ArgumentException))
+        {
+          return Conflict(new { message = ex.Message });
+        }
+        throw;
+      }
 
       if (user == null)
       {
