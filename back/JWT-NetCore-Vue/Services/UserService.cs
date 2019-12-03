@@ -95,9 +95,55 @@
     /// </summary>
     /// <param name="username">Le nom d'utilisateur à utiliser pour authentifier l'<see cref="Utilisateur"/>.</param>
     /// <returns>L'<see cref="User">Utilisateur</see>.</returns>
-    public User Get(string username)
+    public User GetByUsername(string username)
     {
-      return _entities.Find(elm => elm.Username == username).FirstOrDefault();
+      if (string.IsNullOrEmpty(username))
+      {
+        throw new ArgumentNullException(nameof(username));
+      }
+
+      return _entities.Find(elm => elm.Username == username).FirstOrDefault()?.WithoutPassword();
+    }
+
+    /// <summary>
+    /// Obtient un <see cref="User"/>, basé sur l'email fourni.
+    /// </summary>
+    /// <param name="email">L'email à utiliser pour authentifier l'<see cref="Utilisateur"/>.</param>
+    /// <returns>L'<see cref="User">Utilisateur</see>.</returns>
+    public User GetByEmail(string email)
+    {
+      if (string.IsNullOrEmpty(email))
+      {
+        throw new ArgumentNullException(nameof(email));
+      }
+
+      return _entities.Find(elm => elm.Email == email).FirstOrDefault()?.WithoutPassword();
+    }
+
+    /// <summary>
+    /// Enregistre un nouvel <see cref="User"/>.
+    /// </summary>
+    /// <param name="model">L'<see cref="User"/> a créé.</param>
+    /// <returns>L'utilisateur créé.</returns>
+    public User Register(User model)
+    {
+      if (model == null)
+      {
+        throw new ArgumentNullException(nameof(model));
+      }
+
+      // Le nom d'utilisateur doit être unique.
+      if (this.GetByUsername(model.Username) != null)
+      {
+        throw new ArgumentException("Un utilisateur portant le même nom existe deja.");
+      }
+      // L'email doit être unique.
+      else if (this.GetByEmail(model.Email) != null)
+      {
+        throw new ArgumentException("Un utilisateur utilisant le même email existe deja.");
+      }
+
+      return this.Create(model)?.WithoutPassword();
     }
   }
 }

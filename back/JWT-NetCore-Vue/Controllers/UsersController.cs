@@ -78,7 +78,7 @@
     public IActionResult Get()
     {
 
-      User user = _userService.Get("test");
+      User user = _userService.GetByUsername("test");
       return Ok(user);
     }
   }

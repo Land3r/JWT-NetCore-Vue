@@ -21,6 +21,20 @@
     /// </summary>
     /// <param name="username">Le nom d'utilisateur à utiliser pour authentifier l'<see cref="Utilisateur"/>.</param>
     /// <returns>L'<see cref="User">Utilisateur</see>.</returns>
-    User Get(string username);
+    User GetByUsername(string username);
+
+    /// <summary>
+    /// Obtient un <see cref="User"/>, basé sur l'email fourni.
+    /// </summary>
+    /// <param name="email">L'email à utiliser pour authentifier l'<see cref="Utilisateur"/>.</param>
+    /// <returns>L'<see cref="User">Utilisateur</see>.</returns>
+    User GetByEmail(string email);
+
+    /// <summary>
+    /// Enregistre un nouvel <see cref="User"/>.
+    /// </summary>
+    /// <param name="model">L'<see cref="User"/> a créé.</param>
+    /// <returns>L'utilisateur créé.</returns>
+    User Register(User model);
   }
 }
