@@ -17,9 +17,9 @@ export default {
     description: 'Create a new account, and be part of the community.'
   },
   error: {
-    loginfailure: 'Could not create account.'
+    registerfailure: 'Could not create account.'
   },
   success: {
-    loginsuccess: 'Account created. Check your incoming emails.'
+    registerfailure: 'Account created. Check your incoming emails.'
   }
 }

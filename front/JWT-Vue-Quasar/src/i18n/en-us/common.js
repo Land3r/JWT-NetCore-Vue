@@ -13,6 +13,6 @@ export default {
   },
   network: {
     noresponse: 'Could not communicate with the backend.',
-    errorresponse: 'Network error: HTTP {http}: {message}.'
+    errorresponse: 'Network error: HTTP {code}: {message}.'
   }
 }
