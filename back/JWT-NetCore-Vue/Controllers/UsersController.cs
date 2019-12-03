@@ -70,6 +70,25 @@
       }
     }
 
+    [AllowAnonymous]
+    [HttpPost("register")]
+    public IActionResult Register([FromBody]User model)
+    {
+      _logger.LogDebug(string.Format(CultureInfo.InvariantCulture, _localizer["LogRegisterTry"].Value));
+      var user = _userService.Register(model);
+
+      if (user == null)
+      {
+        _logger.LogInformation(string.Format(CultureInfo.InvariantCulture, _localizer["LogRegisterFailed"].Value));
+        return BadRequest(new { message = _localizer["LoginFailed"].Value });
+      }
+      else
+      {
+        _logger.LogInformation(string.Format(CultureInfo.InvariantCulture, _localizer["LogRegisterSuccess"].Value));
+        return Ok(user);
+      }
+    }
+
     /// <summary>
     /// Obtient les informations de l'utilisateur en cours.
     /// </summary>

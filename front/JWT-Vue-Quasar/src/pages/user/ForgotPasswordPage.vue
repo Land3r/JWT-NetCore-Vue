@@ -3,7 +3,7 @@
     <app-transition>
       <app-publiccard>
         <q-card-section class="bg-primary text-white">
-          <div class="text-h6"><q-icon name="perm_identity" size="md" left/>{{$t('forgotpasswordpage.title')}}</div>
+          <div class="text-h6"><q-icon name="security" size="md" left/>{{$t('forgotpasswordpage.title')}}</div>
         </q-card-section>
 
         <q-separator />
@@ -14,7 +14,7 @@
                 <q-icon name="perm_identity" />
               </template>
             </q-input>
-            <div class="text-center q-my-xs text-uppercase">
+            <div class="text-center q-mt-md text-uppercase">
               {{$t('forgotpasswordpage.text.or')}}
             </div>
             <q-input color="primary" v-model="form.email" :label="$t('forgotpasswordpage.form.email')" type="email" clearable clear-icon="close">

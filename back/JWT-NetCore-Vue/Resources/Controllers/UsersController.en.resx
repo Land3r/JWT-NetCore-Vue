@@ -129,4 +129,13 @@
   <data name="LogLoginTry" xml:space="preserve">
     <value>Trying to authenticate user {0}.</value>
   </data>
+  <data name="LogRegisterFailed" xml:space="preserve">
+    <value>User account {0} couldn't be created.</value>
+  </data>
+  <data name="LogRegisterSuccess" xml:space="preserve">
+    <value>User account {0} created.</value>
+  </data>
+  <data name="LogRegisterTry" xml:space="preserve">
+    <value>Trying to create user account.</value>
+  </data>
 </root>

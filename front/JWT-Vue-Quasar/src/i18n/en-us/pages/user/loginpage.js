@@ -3,7 +3,7 @@ export default {
   btn: {
     login: 'Login',
     register: 'Register',
-    forgotpassword: 'Password lost ? 🤙🏽'
+    forgotpassword: 'Password lost ? 🤙'
   },
   form: {
     username: 'Username',

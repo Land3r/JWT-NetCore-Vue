@@ -129,4 +129,13 @@
   <data name="LogLoginTry" xml:space="preserve">
     <value>Tentative d'authentification pour l'utilisateur {0}.</value>
   </data>
+  <data name="LogRegisterFailed" xml:space="preserve">
+    <value>Le compte {0} n'a pas pu être créé.</value>
+  </data>
+  <data name="LogRegisterSuccess" xml:space="preserve">
+    <value>Compte {0} créé.</value>
+  </data>
+  <data name="LogRegisterTry" xml:space="preserve">
+    <value>Tentative de création de compte.</value>
+  </data>
 </root>

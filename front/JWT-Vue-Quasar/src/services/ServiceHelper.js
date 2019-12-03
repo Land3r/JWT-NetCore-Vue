@@ -19,7 +19,7 @@ export function handleError (error) {
   if (error.response) {
     // The request was made and the server responded with a status code
     //   that falls out of the range of 2xx
-    Notify.create({ ...NotifyWarning, message: i18n.t('network.networkerror', { HTML: error.response.status, message: error.response.statusText }) })
+    Notify.create({ ...NotifyWarning, message: i18n.t('network.errorresponse', { HTML: error.response.status, message: error.response.statusText }) })
     const result = {
       ok: false,
       status: error.response.status,
