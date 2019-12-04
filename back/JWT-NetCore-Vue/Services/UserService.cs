@@ -135,6 +135,7 @@
       // Le nom d'utilisateur doit être unique.
       if (this.GetByUsername(model.Username) != null)
       {
+        // TODO: Passer par des ressources.
         throw new ArgumentException("Un utilisateur portant le même nom existe deja.");
       }
       // L'email doit être unique.

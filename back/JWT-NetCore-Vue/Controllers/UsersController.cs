@@ -93,12 +93,17 @@
 
       if (user == null)
       {
-        _logger.LogInformation(string.Format(CultureInfo.InvariantCulture, _localizer["LogRegisterFailed"].Value));
-        return BadRequest(new { message = _localizer["LoginFailed"].Value });
+        _logger.LogInformation(string.Format(CultureInfo.InvariantCulture, _localizer["LogRegisterFailed"].Value, model?.Username));
+        return BadRequest(new { message = _localizer["RegisterFailed"].Value });
       }
       else
       {
-        _logger.LogInformation(string.Format(CultureInfo.InvariantCulture, _localizer["LogRegisterSuccess"].Value));
+        _logger.LogInformation(string.Format(CultureInfo.InvariantCulture, _localizer["LogRegisterSuccess"].Value, model?.Username));
+
+        // Creating email.
+        // TODO: Move and factor this part.
+
+
         return Ok(user);
       }
     }
