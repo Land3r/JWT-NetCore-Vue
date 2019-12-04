@@ -9,7 +9,11 @@
   using JWTNetCoreVue.Entities;
   using JWTNetCoreVue.Extensions;
   using JWTNetCoreVue.Models;
+  using JWTNetCoreVue.Services.Core;
   using JWTNetCoreVue.Settings;
+  using Microsoft.AspNetCore.Mvc;
+  using Microsoft.Extensions.Localization;
+  using Microsoft.Extensions.Logging;
   using Microsoft.Extensions.Options;
   using Microsoft.IdentityModel.Tokens;
   using MongoDB.Driver;
@@ -18,21 +22,12 @@
   /// Classe UserService.
   /// Service pour la gestion des utilisateurs.
   /// </summary>
-  public class UserService : AMongoEntityService<User>, IUserService
+  public class UserService : AMongoEntityLocalizedService<User, UserService>, IUserService
   {
+    /// <summary>
+    /// Le nom de la collection mongo.
+    /// </summary>
     private const string _collectionName = "Users";
-    ///// <summary>
-    ///// La collection des utilisateurs en base.
-    ///// </summary>
-    //private readonly IMongoCollection<User> _users;
-
-    // Utilisateurs hardcodé dans ce cas pour la simplicité
-    // TODO: Ajouter une réelle collection d'utilisateurs venant d'une base de données ou autre source de données.
-    // FIXME: En production, ne stockez JAMAIS les mots de passes en clair. Utilisez une fonction de hashage ou d'encryption.
-    //private readonly List<User> _users = new List<User>
-    //{
-    //  new User { Id = new Guid(), FirstName = "Test", LastName = "User", Username = "test", Password = "test", Email="ngordat@github.com" }
-    //};
 
     /// <summary>
     /// La configuration de l'application.
@@ -43,7 +38,10 @@
     /// Instancie une nouvelle instance de la classe <see cref="UserService"/>.
     /// </summary>
     /// <param name="appSettings">La configuration de l'application.</param>
-    public UserService(IOptions<AppSettings> appSettings) : base(appSettings, _collectionName)
+    public UserService(
+      [FromServices]IStringLocalizer<UserService> localizer,
+      IOptions<AppSettings> appSettings,
+      [FromServices] ILogger<UserService> logger) : base(appSettings, _collectionName, logger, localizer)
     {
       if (appSettings == null)
       {
@@ -62,7 +60,7 @@
     /// <returns>L'<see cref="User">Utilisateur</see> authentifié.</returns>
     public User Authenticate(UserAuthenticateModel model)
     {
-      User user = _entities.Find(x => x.Username == model.Username && x.Password == model.Password).FirstOrDefault();
+      User user = Entities.Find(x => x.Username == model.Username && x.Password == model.Password).FirstOrDefault();
 
       if (user == null)
       {
@@ -102,7 +100,7 @@
         throw new ArgumentNullException(nameof(username));
       }
 
-      return _entities.Find(elm => elm.Username == username).FirstOrDefault()?.WithoutPassword();
+      return Entities.Find(elm => elm.Username == username).FirstOrDefault()?.WithoutPassword();
     }
 
     /// <summary>
@@ -117,7 +115,7 @@
         throw new ArgumentNullException(nameof(email));
       }
 
-      return _entities.Find(elm => elm.Email == email).FirstOrDefault()?.WithoutPassword();
+      return Entities.Find(elm => elm.Email == email).FirstOrDefault()?.WithoutPassword();
     }
 
     /// <summary>
@@ -135,13 +133,12 @@
       // Le nom d'utilisateur doit être unique.
       if (this.GetByUsername(model.Username) != null)
       {
-        // TODO: Passer par des ressources.
-        throw new ArgumentException("Un utilisateur portant le même nom existe deja.");
+        throw new ArgumentException((this as ILocalizedService<UserService>).GetLocalized("RegisterErrorUserUsernameAlreadyExists", model.Username));
       }
       // L'email doit être unique.
       else if (this.GetByEmail(model.Email) != null)
       {
-        throw new ArgumentException("Un utilisateur utilisant le même email existe deja.");
+        throw new ArgumentException((this as ILocalizedService<UserService>).GetLocalized("RegisterErrorUserEmailAlreadyExists", model.Email));
       }
 
       return this.Create(model)?.WithoutPassword();

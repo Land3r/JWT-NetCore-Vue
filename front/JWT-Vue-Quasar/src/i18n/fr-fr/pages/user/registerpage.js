@@ -20,6 +20,6 @@ export default {
     registerfailure: 'Impossible de créer le compte.'
   },
   success: {
-    registerfailure: 'Compte créé. Verifiez vos emails.'
+    registersuccess: 'Compte créé. Verifiez vos emails.'
   }
 }

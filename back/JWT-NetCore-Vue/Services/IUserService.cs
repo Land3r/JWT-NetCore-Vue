@@ -2,6 +2,7 @@
 {
   using JWTNetCoreVue.Entities;
   using JWTNetCoreVue.Models;
+  using JWTNetCoreVue.Services.Core;
 
   /// <summary>
   /// Interface IUSerService.

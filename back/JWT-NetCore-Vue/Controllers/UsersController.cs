@@ -8,13 +8,13 @@
   using Microsoft.AspNetCore.Mvc;
   using Microsoft.Extensions.Logging;
   using Microsoft.Extensions.Localization;
-    using System;
+  using System;
 
-    /// <summary>
-    /// Classe de controlleur UsersController.
-    /// Controlleur pour les <see cref="User">Utilisateurs</see>
-    /// </summary>
-    [Authorize]
+  /// <summary>
+  /// Classe de controlleur UsersController.
+  /// Controlleur pour les <see cref="User">Utilisateurs</see>
+  /// </summary>
+  [Authorize]
   [ApiController]
   [Route("api/[controller]")]
   public class UsersController : ControllerBase
@@ -77,7 +77,7 @@
     {
       _logger.LogDebug(string.Format(CultureInfo.InvariantCulture, _localizer["LogRegisterTry"].Value));
 
-      User user = null;
+      User user;
       try
       {
         user = _userService.Register(model);
@@ -102,7 +102,8 @@
 
         // Creating email.
         // TODO: Move and factor this part.
-
+        EmailService emailService = new EmailService();
+        emailService.SendTest();
 
         return Ok(user);
       }
