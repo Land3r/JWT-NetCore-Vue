@@ -21,8 +21,16 @@
             <q-input color="primary" type="text" v-model="form.firstname" :label="$t('registerpage.form.firstname')" clearable clear-icon="close" />
             <q-input color="primary" type="text" v-model="form.lastname" :label="$t('registerpage.form.lastname')" clearable clear-icon="close" />
             <br />
-            <q-input color="primary" type="text" v-model="form.email" :label="$t('registerpage.form.email')" clearable clear-icon="close" />
-            <q-input color="primary" type="text" v-model="form.email2" :label="$t('registerpage.form.email2')" clearable clear-icon="close" />
+            <q-input color="primary" type="text" v-model="form.email" :label="$t('registerpage.form.email')" clearable clear-icon="close">
+              <template v-slot:prepend>
+                <q-icon name="mail" />
+              </template>
+            </q-input>
+            <q-input color="primary" type="text" v-model="form.email2" :label="$t('registerpage.form.email2')" clearable clear-icon="close">
+              <template v-slot:prepend>
+                <q-icon name="mail" />
+              </template>
+            </q-input>
             <br />
             <q-input color="primary" v-model="form.password" :label="$t('registerpage.form.password')" :type="showPassword ? 'text' : 'password'" >
               <template v-slot:append>
