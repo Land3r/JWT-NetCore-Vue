@@ -12,6 +12,7 @@ export default {
     email2: 'Répétez l\'email',
     password: 'Mot de passe',
     password2: 'Répétez le mot de passe'
+
   },
   text: {
     description: 'Créez un compte et rejoingnez nous !'

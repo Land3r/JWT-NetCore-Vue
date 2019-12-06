@@ -25,6 +25,11 @@
     private readonly IUserService _userService;
 
     /// <summary>
+    /// Le service email.
+    /// </summary>
+    private readonly IEmailService _emailService;
+
+    /// <summary>
     /// Le Logger utilisé par le controller.
     /// </summary>
     private readonly ILogger<UsersController> _logger;
@@ -39,10 +44,12 @@
     /// </summary>
     /// <param name="userService">Le <see cref="IUserService"/>.</param>
     public UsersController(IUserService userService,
+      IEmailService emailService,
       ILogger<UsersController> logger,
       IStringLocalizer<UsersController> localizer)
     {
       _userService = userService;
+      _emailService = emailService;
       _logger = logger;
       _localizer = localizer;
     }
@@ -100,10 +107,7 @@
       {
         _logger.LogInformation(string.Format(CultureInfo.InvariantCulture, _localizer["LogRegisterSuccess"].Value, model?.Username));
 
-        // Creating email.
-        // TODO: Move and factor this part.
-        EmailService emailService = new EmailService();
-        emailService.SendTest();
+        // TODO: Creating email.
 
         return Ok(user);
       }

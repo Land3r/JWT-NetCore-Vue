@@ -5,6 +5,11 @@
   using System;
   using System.Collections.Generic;
 
+  /// <summary>
+  /// Interface <see cref="ICrudService{TEntity}"/>.
+  /// Interface permettant d'accéder aux fonctionnalitées CRUD du service.
+  /// </summary>
+  /// <typeparam name="TEntity">LE type d'entitée manipulée par le service.</typeparam>
   public interface ICrudService<TEntity> where TEntity : IDbEntity
   {
     /// <summary>

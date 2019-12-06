@@ -12,8 +12,13 @@
     public JWTSettings JWT { get; set; }
 
     /// <summary>
-    /// Obtient ou définir la configuration utilisée pour configurer la connection à la base de données.
+    /// Obtient ou définit la configuration utilisée pour configurer la connection à la base de données.
     /// </summary>
-    public MongoDbSettings MongoDbSettings { get; set; }
+    public MongoDbSettings MongoDb { get; set; }
+
+    /// <summary>
+    /// Obtient ou définit la configuration utilisée pour envoyer des emails.
+    /// </summary>
+    public EmailSettings Email { get; set; }
   }
 }
