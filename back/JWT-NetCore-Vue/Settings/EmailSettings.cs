@@ -8,8 +8,8 @@
     public SmtpSettings Smtp { get; set; }
 
     /// <summary>
-    /// Obtient ou définit le nom d'affichage utilisé pour l'envoi des emails.
+    /// Obtient ou définit les informations de l'email envoyant l'email.
     /// </summary>
-    public string FromDisplayName { get; set; }
+    public EmailFromSettings From { get; set; }
   }
 }

@@ -9,12 +9,13 @@
   using Microsoft.Extensions.Logging;
   using Microsoft.Extensions.Localization;
   using System;
+    using JWTNetCoreVue.Entities.Emails;
 
-  /// <summary>
-  /// Classe de controlleur UsersController.
-  /// Controlleur pour les <see cref="User">Utilisateurs</see>
-  /// </summary>
-  [Authorize]
+    /// <summary>
+    /// Classe de controlleur UsersController.
+    /// Controlleur pour les <see cref="User">Utilisateurs</see>
+    /// </summary>
+    [Authorize]
   [ApiController]
   [Route("api/[controller]")]
   public class UsersController : ControllerBase
@@ -108,7 +109,8 @@
         _logger.LogInformation(string.Format(CultureInfo.InvariantCulture, _localizer["LogRegisterSuccess"].Value, model?.Username));
 
         // TODO: Creating email.
-
+        EmailAddress to = new EmailAddress() { Name = model.Username, Address = model.Email };
+        _emailService.TrySend(to, "Test Subject", "<h1>Coucou</h1><br /><p>Ceci est un paragraphe.</p>");
         return Ok(user);
       }
     }

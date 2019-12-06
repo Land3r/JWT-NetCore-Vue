@@ -6,9 +6,9 @@
   public class SmtpSettings
   {
     /// <summary>
-    /// Obtient ou définit l'Url du serveur SMTP utilisé pour l'envoi d'emails.
+    /// Obtient ou définit le host du serveur SMTP utilisé pour l'envoi d'emails.
     /// </summary>
-    public string Url { get; set; }
+    public string Host { get; set; }
 
     /// <summary>
     /// Obtient ou définit le Port du serveur SMTP utilisé pour l'envoi d'emails.
