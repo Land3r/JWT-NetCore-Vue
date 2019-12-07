@@ -5,5 +5,26 @@
     "common_root_object": "none",
     "create_env_files": false,
     "add_env_to_gitignore": true
+  },
+  "@quasar/icon-genie": {
+    "minify_dev": "pngquant",
+    "minify_build": "optipng",
+    "cordova": {
+      "background_color": "#000074",
+      "splashscreen_type": "pure"
+    },
+    "build_always": true,
+    "__internal": {
+      "dev": {
+        "spa": {
+          "iconHash": "28cb2cb8ae5f56f86be700b645681791"
+        }
+      },
+      "build": {
+        "spa": {
+          "iconHash": "28cb2cb8ae5f56f86be700b645681791"
+        }
+      }
+    }
   }
 }
