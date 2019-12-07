@@ -1,4 +1,4 @@
-﻿namespace JWTNetCoreVue.Models
+﻿namespace JWTNetCoreVue.Models.Users
 {
   using System.ComponentModel.DataAnnotations;
 

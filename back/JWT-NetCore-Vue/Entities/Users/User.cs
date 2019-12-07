@@ -1,4 +1,4 @@
-﻿namespace JWTNetCoreVue.Entities
+﻿namespace JWTNetCoreVue.Entities.Users
 {
     using JWTNetCoreVue.Entities.Db;
     using MongoDB.Bson;

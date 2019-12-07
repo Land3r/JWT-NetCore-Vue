@@ -6,9 +6,9 @@
   using System.Linq;
   using System.Security.Claims;
   using System.Text;
-  using JWTNetCoreVue.Entities;
+  using JWTNetCoreVue.Entities.Users;
   using JWTNetCoreVue.Extensions;
-  using JWTNetCoreVue.Models;
+  using JWTNetCoreVue.Models.Users;
   using JWTNetCoreVue.Services.Core;
   using JWTNetCoreVue.Settings;
   using Microsoft.AspNetCore.Mvc;
@@ -38,6 +38,8 @@
     /// Instancie une nouvelle instance de la classe <see cref="UserService"/>.
     /// </summary>
     /// <param name="appSettings">La configuration de l'application.</param>
+    /// <param name="localizer">Les ressources de localisation.</param>
+    /// <param name="logger">Le logger utilisé par le service.</param>
     public UserService(
       [FromServices]IStringLocalizer<UserService> localizer,
       IOptions<AppSettings> appSettings,

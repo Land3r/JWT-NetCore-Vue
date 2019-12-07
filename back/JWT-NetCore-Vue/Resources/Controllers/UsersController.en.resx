@@ -129,6 +129,18 @@
   <data name="LogLoginTry" xml:space="preserve">
     <value>Trying to authenticate user {0}.</value>
   </data>
+  <data name="LogPasswordLostTokenTry" xml:space="preserve">
+    <value>Trying to reset password for a user.</value>
+  </data>
+  <data name="LogPasswordLostTokenUserFailed" xml:space="preserve">
+    <value>Could not generate reset password token for user.</value>
+  </data>
+  <data name="LogPasswordLostTokenUserNotFound" xml:space="preserve">
+    <value>User identified with {method} {value} not found.</value>
+  </data>
+  <data name="LogPasswordLostTokenUserSuccess" xml:space="preserve">
+    <value>Reset password token generated for user {value}.</value>
+  </data>
   <data name="LogRegisterFailed" xml:space="preserve">
     <value>User account {0} couldn't be created.</value>
   </data>

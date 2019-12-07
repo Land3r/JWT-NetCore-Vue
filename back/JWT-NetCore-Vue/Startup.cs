@@ -73,6 +73,7 @@ namespace JWTNetCoreVue
 
       // configure DI for application services
       services.AddScoped<IUserService, UserService>();
+      services.AddScoped<IUserPasswordResetTokenService, UserPasswordResetTokenService>();
       services.AddScoped<IEmailService, EmailService>();
     }
 

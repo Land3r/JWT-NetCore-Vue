@@ -30,6 +30,15 @@
     /// <param name="collectionName">Le nom de la collection en base.</param>
     public AMongoEntityService(IOptions<AppSettings> appSettings, string collectionName, [FromServices] ILogger<TService> logger) : base(logger)
     {
+      if (appSettings == null)
+      {
+        throw new ArgumentNullException(nameof(appSettings));
+      }
+      else if (string.IsNullOrEmpty(collectionName))
+      {
+        throw new ArgumentNullException(nameof(collectionName));
+      }
+
       var client = new MongoClient(appSettings?.Value.MongoDb.ConnectionString);
       var db = client.GetDatabase(appSettings?.Value.MongoDb.DatabaseName);
 
