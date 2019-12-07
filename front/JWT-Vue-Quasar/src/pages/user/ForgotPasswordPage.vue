@@ -43,7 +43,7 @@ import PublicCard from 'components/layout/PublicCard'
 import Transition from 'components/common/presentation/Transition'
 
 export default {
-  name: 'forgotpasswordpage',
+  name: 'ForgotPasswordPage',
   components: {
     'app-transition': Transition,
     'app-publiccard': PublicCard

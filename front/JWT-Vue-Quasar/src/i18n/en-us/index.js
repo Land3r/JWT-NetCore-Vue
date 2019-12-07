@@ -5,6 +5,7 @@ import mainlayout from './layouts/mainlayout'
 import indexpage from './pages/indexpage'
 import loginpage from './pages/user/loginpage'
 import forgotpasswordpage from './pages/user/forgotpasswordpage'
+import resetpasswordpage from './pages/user/resetpasswordpage'
 import registerpage from './pages/user/registerpage'
 
 export default {
@@ -21,6 +22,9 @@ export default {
   },
   forgotpasswordpage: {
     ...forgotpasswordpage
+  },
+  resetpasswordpage: {
+    ...resetpasswordpage
   },
   registerpage: {
     ...registerpage
