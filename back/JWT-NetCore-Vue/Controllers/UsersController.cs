@@ -170,18 +170,21 @@
       }
 
       UserPasswordResetToken userPasswordResetToken;
+      string token;
       try
       {
+        token = CryptographicHelper.GetUrlSafeToken(24);
         userPasswordResetToken = new UserPasswordResetToken()
         {
-          Token = CryptographicHelper.GetUrlSafeToken(24),
+          Token = token,
           Created = DateTime.UtcNow,
           CreatedBy = new UserReference() { Id = user.Id, Username = user.Username }
         };
         userPasswordResetToken = _userPasswordResetTokenService.Create(userPasswordResetToken);
 
-        // Envoie de l'email.
+        // Envoie de l'email, avec le token en clair.
         // TODO.
+        _emailService.SendTemplate(user.Email, "PasswordLost", new { username = user.Username, token = token});
       }
       catch (Exception ex)
       {
