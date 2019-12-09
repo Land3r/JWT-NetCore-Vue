@@ -202,7 +202,8 @@
           username = user.Username,
           resetpasswordlink = $"{new Uri(new Uri(_appSettings.Environment.FrontUrl), $"#/resetpassword/{token}")}",
           sitename = _appSettings.Environment.Name,
-          siteurl = _appSettings.Environment.FrontUrl
+          siteurl = _appSettings.Environment.FrontUrl,
+          unsubscribeurl = new Uri(new Uri(_appSettings.Environment.FrontUrl), "/unsubscribe").ToString(),
         });
       }
       catch (Exception ex)
