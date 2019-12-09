@@ -1,9 +1,8 @@
 ﻿namespace JWTNetCoreVue.Entities.Users
 {
-    using JWTNetCoreVue.Entities.Db;
-    using MongoDB.Bson;
-    using MongoDB.Bson.Serialization.Attributes;
-    using System;
+  using JWTNetCoreVue.Entities.Db;
+  using MongoDB.Bson;
+  using MongoDB.Bson.Serialization.Attributes;
 
   /// <summary>
   /// Représente un utilisateur.
@@ -39,6 +38,18 @@
     /// </summary>
     [BsonRepresentation(BsonType.String)]
     public string Password { get; set; }
+
+    /// <summary>
+    /// Obtient ou définit si le compte utilisateur est actif ou non.
+    /// </summary>
+    [BsonRepresentation(BsonType.Boolean)]
+    public bool? Active { get; set; }
+
+    /// <summary>
+    /// Obtient ou définit le token d'activation du compte.
+    /// </summary>
+    [BsonRepresentation(BsonType.String)]
+    public string ActivationToken { get; set; }
 
     /// <summary>
     /// Obtient ou définit le Token d'authentification utilisé par l'<see cref="User">Utilisateur</see>.

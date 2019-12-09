@@ -143,9 +143,15 @@
       {
         _logger.LogInformation(string.Format(CultureInfo.InvariantCulture, _localizer["LogRegisterSuccess"].Value, model?.Username));
 
-        // TODO: Creating email.
-        EmailAddress to = new EmailAddress() { Name = model.Username, Address = model.Email };
-        _emailService.TrySend(to, "Test Subject", "<h1>Coucou</h1><br /><p>Ceci est un paragraphe.</p>");
+        // Envoie de l'email d'activation.
+        _emailService.SendTemplate(new EmailAddress() { Address = model.Email, Name = model.Username }, "Register", new
+        {
+          username = user.Username,
+          activateaccountlink = $"{new Uri(new Uri(_appSettings.Environment.FrontUrl), $"#/activate/{user.ActivationToken}")}",
+          sitename = _appSettings.Environment.Name,
+          siteurl = _appSettings.Environment.FrontUrl,
+          unsubscribeurl = new Uri(new Uri(_appSettings.Environment.FrontUrl), "/unsubscribe").ToString(),
+        });
         return Ok(user);
       }
     }

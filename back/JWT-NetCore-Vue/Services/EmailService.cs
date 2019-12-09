@@ -136,9 +136,9 @@ namespace JWTNetCoreVue.Services
 
       // From
       message.From.Add(new MailboxAddress(_appSettings.Email.From.Name, _appSettings.Email.From.Address));
-      // Reply-to
-      //message.ReplyTo.Add(new MailboxAddress(_appSettings.Email.From.Name, _appSettings.Email.From.Address));
+
       // To
+      // TODO: Faire une vérif de la validitée des emails avant.
       if (!string.IsNullOrEmpty(address?.Name))
       {
         message.To.Add(new MailboxAddress(address.Name, address.Address));

@@ -121,7 +121,7 @@
     <value>Le nom d'utilisateur ou le mot de passe ne correspondent pas.</value>
   </data>
   <data name="LogLoginFailed" xml:space="preserve">
-    <value>Utilisateur {0} n'a pas pu être authentifié.</value>
+    <value>Utilisateur {0} n'a pas pu être authentifié. Soit les informations de login sont incorrect, soit le compte n'est pas activé.</value>
   </data>
   <data name="LogLoginSuccess" xml:space="preserve">
     <value>Utilisateur {0} authentifié avec succès.</value>

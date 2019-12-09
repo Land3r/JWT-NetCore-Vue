@@ -44,7 +44,8 @@
     public UserService(
       [FromServices]IStringLocalizer<UserService> localizer,
       IOptions<AppSettings> appSettings,
-      [FromServices] ILogger<UserService> logger) : base(appSettings, _collectionName, logger, localizer)
+      [FromServices] ILogger<UserService> logger)
+      : base(appSettings, _collectionName, logger, localizer)
     {
       if (appSettings == null)
       {
@@ -77,6 +78,12 @@
       }
       else
       {
+        if (user.Active == false)
+        {
+          // Account is not active.
+          return null;
+        }
+
         // Generation du token JWT.
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.ASCII.GetBytes(_appSettings.Security.JWT.Secret);
@@ -144,11 +151,15 @@
       {
         throw new ArgumentException((this as ILocalizedService<UserService>).GetLocalized("RegisterErrorUserUsernameAlreadyExists", model.Username));
       }
+
       // L'email doit être unique.
       else if (this.GetByEmail(model.Email) != null)
       {
         throw new ArgumentException((this as ILocalizedService<UserService>).GetLocalized("RegisterErrorUserEmailAlreadyExists", model.Email));
       }
+
+      model.ActivationToken = CryptographicHelper.GetUrlSafeToken(24);
+      model.Active = false;
 
       return this.Create(model)?.WithoutPassword();
     }
