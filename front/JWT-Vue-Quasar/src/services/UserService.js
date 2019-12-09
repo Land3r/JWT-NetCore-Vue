@@ -6,6 +6,7 @@ import { API, getApiEndpoint } from 'data/backend'
 
 const endpoints = {
   'AUTH': '/auth',
+  'FORGOTPASSWORD': '/forgotpassword',
   'RESETPASSWORD': '/resetpassword',
   'REGISTER': '/register',
   'GET': ''
@@ -108,15 +109,15 @@ export default class UserService {
   }
 
   /**
-   * Reset a user password.
+   * Asks to reset a user password.
    * @param {string} username The user's username.
    * @param {string} email The user's email.
    */
-  doResetPassword (username, email) {
+  doForgotPassword (username, email) {
     const requestOptions = {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
-      url: getApiEndpoint(API.USER + endpoints.RESETPASSWORD),
+      url: getApiEndpoint(API.USER + endpoints.FORGOTPASSWORD),
       data: {
         username: username,
         email: email

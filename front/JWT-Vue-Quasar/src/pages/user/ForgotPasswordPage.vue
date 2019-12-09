@@ -25,7 +25,7 @@
             <br />
             <div class="text-center">{{$t('forgotpasswordpage.text.description', {duration: 15})}}</div>
             <br />
-            <q-btn class="bg-primary text-white full-width" type="submit" @click="doResetPassword" :loading="isLoading" :disable="isLoading || !isFormValid">{{$t('forgotpasswordpage.btn.send')}}</q-btn>
+            <q-btn class="bg-primary text-white full-width" type="submit" @click="doForgotPassword" :loading="isLoading" :disable="isLoading || !isFormValid">{{$t('forgotpasswordpage.btn.send')}}</q-btn>
           </q-form>
           <q-btn class="bg-secondary text-white full-width q-mt-md q-mb-xs" :to="{ name: 'LoginPage' }">{{$t('forgotpasswordpage.btn.login')}}</q-btn>
         </q-card-section>
@@ -63,11 +63,11 @@ export default {
     }
   },
   methods: {
-    doResetPassword: function () {
+    doForgotPassword: function () {
       this.isLoading = true
 
       const userservice = new UserService()
-      userservice.doResetPassword(this.form.username, this.form.password).then((response) => {
+      userservice.doForgotPassword(this.form.username, this.form.password).then((response) => {
         this.isLoading = false
         this.$q.notify({ ...NotifySuccess, message: this.$t('forgotpasswordpage.success.sendsuccess', { username: xss(response.username) }), html: true })
       }).catch((response) => {

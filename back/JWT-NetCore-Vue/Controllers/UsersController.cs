@@ -143,8 +143,8 @@
     /// <param name="model">Les données de l'utilisateur dont le mot de passe doit être réinitialiser.</param>
     /// <returns>Le résultat de l'opération.</returns>
     [AllowAnonymous]
-    [HttpPost("passwordlost")]
-    public IActionResult PasswordLost([FromBody]UserPasswordLostModel model)
+    [HttpPost("forgotpassword")]
+    public IActionResult ForgotPassword([FromBody]UserPasswordLostModel model)
     {
       _logger.LogDebug(string.Format(CultureInfo.InvariantCulture, _localizer["LogPasswordLostTokenTry"].Value));
 

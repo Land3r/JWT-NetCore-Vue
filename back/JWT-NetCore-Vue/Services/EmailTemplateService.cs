@@ -7,7 +7,9 @@
   using Microsoft.Extensions.Localization;
   using Microsoft.Extensions.Logging;
   using Microsoft.Extensions.Options;
-    using MongoDB.Driver;
+  using MongoDB.Driver;
+    using System;
+    using System.Reflection;
 
     /// <summary>
     /// Classe <see cref="EmailTemplateService"/>.
@@ -18,7 +20,7 @@
     /// <summary>
     /// Le nom de la collection mongo.
     /// </summary>
-    private const string _collectionName = "Emailtemplates";
+    private const string _collectionName = "EmailTemplates";
 
     /// <summary>
     /// Initialise une nouvelle instance de la classe <see cref="EmailTemplateService"/>.
