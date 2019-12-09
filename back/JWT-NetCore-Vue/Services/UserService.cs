@@ -8,7 +8,8 @@
   using System.Text;
   using JWTNetCoreVue.Entities.Users;
   using JWTNetCoreVue.Extensions;
-  using JWTNetCoreVue.Models.Users;
+    using JWTNetCoreVue.Helpers;
+    using JWTNetCoreVue.Models.Users;
   using JWTNetCoreVue.Services.Core;
   using JWTNetCoreVue.Settings;
   using Microsoft.AspNetCore.Mvc;
@@ -62,7 +63,13 @@
     /// <returns>L'<see cref="User">Utilisateur</see> authentifié.</returns>
     public User Authenticate(UserAuthenticateModel model)
     {
-      User user = Entities.Find(x => x.Username == model.Username && x.Password == model.Password).FirstOrDefault();
+      if (model == null)
+      {
+        throw new ArgumentNullException(nameof(model));
+      }
+
+      string hashedPassword = CryptographicHelper.GetHash(model.Password, _appSettings.Security.HashSalt);
+      User user = Entities.Find(x => x.Username == model.Username && x.Password == hashedPassword).FirstOrDefault();
 
       if (user == null)
       {
@@ -144,6 +151,19 @@
       }
 
       return this.Create(model)?.WithoutPassword();
+    }
+
+    public override User Create(User elm)
+    {
+      if (elm == null)
+      {
+        throw new ArgumentNullException(nameof(elm));
+      }
+
+      string hashedPassword = CryptographicHelper.GetHash(elm.Password, _appSettings.Security.HashSalt);
+      elm.Password = hashedPassword;
+
+      return base.Create(elm);
     }
   }
 }

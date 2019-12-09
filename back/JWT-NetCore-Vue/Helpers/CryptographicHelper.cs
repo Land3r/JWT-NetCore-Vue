@@ -1,12 +1,11 @@
 ﻿namespace JWTNetCoreVue.Helpers
 {
   using System;
-  using System.Collections.Generic;
+    using System.Collections.Generic;
     using System.Globalization;
-    using System.Linq;
+  using System.Linq;
   using System.Security.Cryptography;
-    using System.Text;
-    using System.Threading.Tasks;
+  using System.Text;
 
   /// <summary>
   /// Classe <see cref="CryptographicHelper"/>.
@@ -65,7 +64,7 @@
     }
 
     /// <summary>
-    /// Génère un hash d'une chaine de charactères en ASCII.
+    /// Génère un hash d'une chaine de charactères en UTF8.
     /// </summary>
     /// <param name="clear">La valeur en clair à hasher (sous forme de texte).</param>
     /// <returns>La valeur hashée.</returns>
@@ -76,10 +75,42 @@
         throw new ArgumentNullException(nameof(clear));
       }
 
-      byte[] data = Encoding.ASCII.GetBytes(clear);
+      byte[] data = Encoding.UTF8.GetBytes(clear);
       byte[] result = GetHash(data);
 
-      return result.ToString();
+      return ByteArrayToString(result);
+    }
+
+    public static byte[] GetHash(byte[] clear, byte[] salt)
+    {
+      byte[] data = clear.Concat(salt).ToArray();
+      byte[] result = GetHash(data);
+
+      return result;
+    }
+
+    public static string GetHash(string clear, string salt)
+    {
+      string saltedclear = string.Concat(salt, clear);
+      byte[] data = Encoding.UTF8.GetBytes(saltedclear);
+      byte[] result = GetHash(data);
+
+      return ByteArrayToString(result);
+    }
+
+    /// <summary>
+    /// Convertie un tableau de byte en chaine de characteres.
+    /// </summary>
+    /// <param name="bytes">Le tableau de bytes.</param>
+    /// <returns>La chaine de characteres correspondant.</returns>
+    private static string ByteArrayToString(byte[] bytes)
+    {
+      StringBuilder hex = new StringBuilder(bytes.Length * 2);
+      foreach (byte b in bytes)
+      {
+        hex.AppendFormat(CultureInfo.InvariantCulture, "{0:x2}", b);
+      }
+      return hex.ToString();
     }
   }
 }
