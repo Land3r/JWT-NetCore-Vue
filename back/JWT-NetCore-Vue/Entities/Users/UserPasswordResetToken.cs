@@ -1,5 +1,6 @@
 ﻿namespace JWTNetCoreVue.Entities.Users
 {
+  using System;
   using JWTNetCoreVue.Entities.Db;
   using MongoDB.Bson;
   using MongoDB.Bson.Serialization.Attributes;
@@ -11,5 +12,11 @@
     /// </summary>
     [BsonRepresentation(BsonType.String)]
     public string Token { get; set; }
+
+    /// <summary>
+    /// Obtient ou définit la date jusqu'à laquelle le token est valide.
+    /// </summary>
+    [BsonRepresentation(BsonType.DateTime)]
+    public DateTime ValidUntil { get; set; }
   }
 }

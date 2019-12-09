@@ -150,6 +150,18 @@
   <data name="LogRegisterTry" xml:space="preserve">
     <value>Tentative de création de compte.</value>
   </data>
+  <data name="LogResetPasswordExistsNotFound" xml:space="preserve">
+    <value>Token {0} non trouvé.</value>
+  </data>
+  <data name="LogResetPasswordExistsNotValid" xml:space="preserve">
+    <value>Token expiré.</value>
+  </data>
+  <data name="LogResetPasswordExistsTry" xml:space="preserve">
+    <value>Tentative de vérification du token fourni.</value>
+  </data>
+  <data name="LogResetPasswordExistsUserNotFound" xml:space="preserve">
+    <value>Utilisateur associé au token fourni non trouvé.</value>
+  </data>
   <data name="RegisterFailed" xml:space="preserve">
     <value>Impossible de créer le compte demandé.</value>
   </data>

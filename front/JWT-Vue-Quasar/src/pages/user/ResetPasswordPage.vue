@@ -51,7 +51,6 @@
 </template>
 
 <script>
-import xss from 'xss'
 import { NotifySuccess, NotifyFailure } from 'data/notify'
 
 import UserService from 'services/UserService'
@@ -66,13 +65,36 @@ export default {
   },
   data: function () {
     return {
-      isLoading: false,
+      resetpasswordtoken: '',
+      showNewPassword: false,
+      showNewPassword2: false,
+      isLoading: true,
       form: {
         username: '',
         email: '',
         newpassword: '',
         newpassword2: ''
       }
+    }
+  },
+  created: function () {
+    if (this.$route.params.resetpasswordtoken != null) {
+      this.resetpasswordtoken = this.$route.params.resetpasswordtoken
+
+      const userservice = new UserService()
+      userservice.doIsResetPasswordTokenValid(this.resetpasswordtoken).then((response) => {
+        this.form.username = response.username
+        this.form.email = response.email
+
+        this.isLoading = false
+      }).catch((response) => {
+        console.dir(response)
+        this.isLoading = false
+        this.$q.notify({ ...NotifyFailure, message: this.$t('resetpasswordpage.error.tokenisvaliderror') })
+      })
+    } else {
+      this.$q.notify({ ...NotifyFailure, message: this.$t('resetpasswordpage.error.tokennotfound') })
+      this.$router.push({ name: 'LoginPage' })
     }
   },
   computed: {
@@ -87,12 +109,13 @@ export default {
       this.isLoading = true
 
       const userservice = new UserService()
-      userservice.doResetPassword(this.form.username, this.form.password).then((response) => {
+      userservice.doResetPassword(this.resetpasswordtoken, this.form.email, this.form.username, this.form.password).then((response) => {
         this.isLoading = false
-        this.$q.notify({ ...NotifySuccess, message: this.$t('resetpasswordpage.success.sendsuccess', { username: xss(response.username) }), html: true })
+        this.$q.notify({ ...NotifySuccess, message: this.$t('resetpasswordpage.success.resetpasswordsuccess') })
+        this.$router.push({ name: 'LoginPage' })
       }).catch((response) => {
         this.isLoading = false
-        this.$q.notify({ ...NotifyFailure, message: this.$t('resetpasswordpage.error.sendfailure') })
+        this.$q.notify({ ...NotifyFailure, message: this.$t('resetpasswordpage.error.resetpasswordfailure') })
       })
     }
   }

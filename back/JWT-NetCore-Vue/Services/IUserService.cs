@@ -3,12 +3,14 @@
   using JWTNetCoreVue.Entities.Users;
   using JWTNetCoreVue.Models.Users;
   using JWTNetCoreVue.Services.Core;
+    using MongoDB.Driver;
+    using System;
 
-  /// <summary>
-  /// Interface IUSerService.
-  /// Interface pour le service des utilisateurs.
-  /// </summary>
-  public interface IUserService : ICrudService<User>
+    /// <summary>
+    /// Interface IUSerService.
+    /// Interface pour le service des utilisateurs.
+    /// </summary>
+    public interface IUserService : ICrudService<User>
   {
     /// <summary>
     /// Authentifie un <see cref="User"/>, basé sur le <see cref="UserAuthenticateModel"/> fourni.
@@ -30,6 +32,14 @@
     /// <param name="email">L'email à utiliser pour authentifier l'<see cref="Utilisateur"/>.</param>
     /// <returns>L'<see cref="User">Utilisateur</see>.</returns>
     User GetByEmail(string email);
+
+    /// <summary>
+    /// Mets à jour un utilisateur avec un nouveau mot de passe.
+    /// </summary>
+    /// <param name="id">L'id de l'utilisateur à mettre à jour.</param>
+    /// <param name="clearPassword">Le mot de passe en clair, avant encryption.</param>
+    /// <returns>Le résultat de la mise à jour.</returns>
+    ReplaceOneResult UpdatePassword(Guid id, string clearPassword);
 
     /// <summary>
     /// Enregistre un nouvel <see cref="User"/>.

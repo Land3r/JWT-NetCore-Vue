@@ -8,8 +8,8 @@
   using System.Text;
   using JWTNetCoreVue.Entities.Users;
   using JWTNetCoreVue.Extensions;
-    using JWTNetCoreVue.Helpers;
-    using JWTNetCoreVue.Models.Users;
+  using JWTNetCoreVue.Helpers;
+  using JWTNetCoreVue.Models.Users;
   using JWTNetCoreVue.Services.Core;
   using JWTNetCoreVue.Settings;
   using Microsoft.AspNetCore.Mvc;
@@ -153,6 +153,11 @@
       return this.Create(model)?.WithoutPassword();
     }
 
+    /// <summary>
+    /// Crée un <see cref="User"/>.
+    /// </summary>
+    /// <param name="elm">Les données de le <see cref="User"/> a créé.</param>
+    /// <returns>L'utilisateur créé.</returns>
     public override User Create(User elm)
     {
       if (elm == null)
@@ -164,6 +169,22 @@
       elm.Password = hashedPassword;
 
       return base.Create(elm);
+    }
+
+    /// <summary>
+    /// Mets à jour un utilisateur avec un nouveau mot de passe.
+    /// </summary>
+    /// <param name="id">L'id de l'utilisateur à mettre à jour.</param>
+    /// <param name="clearPassword">Le mot de passe en clair, avant encryption.</param>
+    /// <returns>Le résultat de la mise à jour.</returns>
+    public ReplaceOneResult UpdatePassword(Guid id, string clearPassword)
+    {
+      User user = this.Get(id);
+
+      string hashedPassword = CryptographicHelper.GetHash(clearPassword, _appSettings.Security.HashSalt);
+      user.Password = hashedPassword;
+
+      return this.Update(user);
     }
   }
 }

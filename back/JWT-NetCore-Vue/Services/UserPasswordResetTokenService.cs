@@ -1,18 +1,16 @@
 ﻿namespace JWTNetCoreVue.Services
 {
+  using System;
+  using System.Linq;
   using JWTNetCoreVue.Entities.Users;
-    using JWTNetCoreVue.Helpers;
-    using JWTNetCoreVue.Services.Core;
+  using JWTNetCoreVue.Helpers;
+  using JWTNetCoreVue.Services.Core;
   using JWTNetCoreVue.Settings;
   using Microsoft.AspNetCore.Mvc;
   using Microsoft.Extensions.Localization;
   using Microsoft.Extensions.Logging;
   using Microsoft.Extensions.Options;
   using MongoDB.Driver;
-  using System;
-  using System.Collections.Generic;
-  using System.Linq;
-  using System.Threading.Tasks;
 
   /// <summary>
   /// Classe <see cref="UserPasswordResetTokenService"/>.
@@ -37,6 +35,12 @@
     {
     }
 
+    /// <summary>
+    /// Obtient un <see cref="UserPasswordResetToken"/>, basé sur la valeur du token.
+    /// Notez que le token est hashé avant d'être comparé en base.
+    /// </summary>
+    /// <param name="token">La valeur du token à rechercher.</param>
+    /// <returns>Le <see cref="UserPasswordResetToken"/>, si trouvé.</returns>
     public UserPasswordResetToken GetByToken(string token)
     {
       if (string.IsNullOrEmpty(token))
@@ -52,6 +56,11 @@
       return Entities.Find(elm => elm.Token == hash).FirstOrDefault();
     }
 
+    /// <summary>
+    /// Crée un <see cref="UserPasswordResetToken"/>, avec gestion du hashage en base.
+    /// </summary>
+    /// <param name="elm">Le <see cref="UserPasswordResetToken"/> à créer.</param>
+    /// <returns>L'élément créé.</returns>
     public override UserPasswordResetToken Create(UserPasswordResetToken elm)
     {
       // We are using a hash function for storing reset password token for security reasons.
@@ -63,10 +72,26 @@
       return base.Create(elm);
     }
 
+    /// <summary>
+    /// Obtient si le token de réinitialisation de mot de passe est valide.
+    /// </summary>
+    /// <param name="userPasswordResetToken">Le token a valider.</param>
+    /// <returns>Si le token est valide ou non.</returns>
     public bool IsValid(UserPasswordResetToken userPasswordResetToken)
     {
-      //TODO: Vérifier que l'Id existe && que le temps écoulé depuis la génération est < à une valeur à determiner.
-      return true;
+      if (userPasswordResetToken == null)
+      {
+        throw new ArgumentNullException(nameof(userPasswordResetToken));
+      }
+
+      if (userPasswordResetToken.ValidUntil > DateTime.UtcNow)
+      {
+        return true;
+      }
+      else
+      {
+        return false;
+      }
     }
   }
 }

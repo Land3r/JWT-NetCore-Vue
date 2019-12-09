@@ -15,6 +15,7 @@ export default {
   error: {
     tokennotvalid: 'Reset password token is not valid.',
     tokennotfound: 'Reset password token not found',
+    tokenisvaliderror: 'Could not verify token authenticity.',
     resetpasswordfailure: 'Could not reset the password.'
   },
   success: {

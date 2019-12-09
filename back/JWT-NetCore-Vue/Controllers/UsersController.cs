@@ -2,6 +2,7 @@
 {
   using System;
   using System.Globalization;
+  using System.Net;
   using JWTNetCoreVue.Entities.Db;
   using JWTNetCoreVue.Entities.Emails;
   using JWTNetCoreVue.Entities.Users;
@@ -189,6 +190,7 @@
         userPasswordResetToken = new UserPasswordResetToken()
         {
           Token = token,
+          ValidUntil = DateTime.UtcNow.AddMinutes(_appSettings.Security.ResetPasswordTokenDurationInMinutes),
           Created = DateTime.UtcNow,
           CreatedBy = new UserReference() { Id = user.Id, Username = user.Username }
         };
@@ -215,34 +217,91 @@
     }
 
     /// <summary>
+    /// Réinitialise le mot de passe d'un utilisateur.
+    /// </summary>
+    /// <param name="model">Les données de réinitialisation.</param>
+    /// <returns>Les informations de l'utilisateur, si le token est correct.</returns>
+    [AllowAnonymous]
+    [HttpPost("resetpassword")]
+    public IActionResult ResetPassword(UserResetPasswordModel model)
+    {
+      _logger.LogDebug(string.Format(CultureInfo.InvariantCulture, _localizer["LogResetPasswordTry"].Value));
+
+      if (model == null)
+      {
+        throw new ArgumentNullException(nameof(model));
+      }
+
+      // Token valide ?
+      IActionResult existsResult = this.ResetPasswordExists(model.ResetPasswordToken);
+      User user;
+
+      if (existsResult is OkObjectResult)
+      {
+        UserPasswordLostResponseModel result = (existsResult as OkObjectResult).Value as UserPasswordLostResponseModel;
+        if (result.Email == model.Email && result.Username == model.Username)
+        {
+          // Relié au bon utilisateur.
+          user = _userService.GetByEmail(result.Email);
+          _userService.UpdatePassword(user.Id, model.Password);
+
+          return Ok();
+        }
+        else
+        {
+          return Conflict(new { message = _localizer["LogResetPasswordUserConflict"].Value });
+        }
+      }
+      else
+      {
+        return existsResult;
+      }
+
+      return Ok();
+    }
+
+    /// <summary>
     /// Vérifie si le token fourni existe.
     /// </summary>
-    /// <param name="model">Le token  valider.</param>
-    /// <returns>Le résultat de l'opération.</returns>
+    /// <param name="token">Le token à valider.</param>
+    /// <returns>Les informations de l'utilisateur, si le token est correct.</returns>
     [AllowAnonymous]
-    [HttpGet("passwordreset/{token}")]
-    public IActionResult PasswordResetExists(string token)
+    [HttpGet("resetpassword/{token}")]
+    public IActionResult ResetPasswordExists(string token)
     {
-      _logger.LogDebug(string.Format(CultureInfo.InvariantCulture, _localizer["LogPasswordResetExistsTry"].Value));
+      _logger.LogDebug(string.Format(CultureInfo.InvariantCulture, _localizer["LogResetPasswordExistsTry"].Value));
 
       if (string.IsNullOrEmpty(token))
       {
         throw new ArgumentNullException(nameof(token));
       }
 
-      UserPasswordResetToken userPasswordResetToken;
-      try
-      {
-        userPasswordResetToken = _userPasswordResetTokenService.GetByToken(token);
-      }
-      catch (Exception ex)
-      {
+      UserPasswordResetToken userPasswordResetToken = _userPasswordResetTokenService.GetByToken(token);
+      User user;
 
-        throw ex;
+      if (userPasswordResetToken == null)
+      {
+        _logger.LogDebug(string.Format(CultureInfo.InvariantCulture, _localizer["LogResetPasswordExistsNotFound"].Value, token));
+        return NotFound(new { message = string.Format(CultureInfo.InvariantCulture, _localizer["LogResetPasswordExistsNotFound"].Value, token) });
       }
 
-
-      return Ok();
+      if (_userPasswordResetTokenService.IsValid(userPasswordResetToken))
+      {
+        user = _userService.Get(userPasswordResetToken.CreatedBy.Id);
+        if (user != null)
+        {
+          return Ok(new UserPasswordLostResponseModel() { Username = user.Username, Email = user.Email });
+        }
+        else
+        {
+          _logger.LogError(string.Format(CultureInfo.InvariantCulture, _localizer["LogResetPasswordExistsUserNotFound"].Value));
+          return NotFound(new { message = string.Format(CultureInfo.InvariantCulture, _localizer["LogResetPasswordExistsUserNotFound"].Value) });
+        }
+      }
+      else
+      {
+        return StatusCode(498, new { message = string.Format(CultureInfo.InvariantCulture, _localizer["LogResetPasswordExistsNotValid"].Value) });
+      }
     }
 
     /// <summary>

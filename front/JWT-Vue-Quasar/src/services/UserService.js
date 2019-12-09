@@ -134,6 +134,48 @@ export default class UserService {
   }
 
   /**
+   * Gets whether or not the resetpasswordtoken is valid, and gets the associated user's information.
+   * @param {string} resetpasswordtoken The resetpasswordtoken.
+   */
+  doIsResetPasswordTokenValid (resetpasswordtoken) {
+    const requestOptions = {
+      method: 'get',
+      headers: { 'Content-Type': 'application/json' },
+      url: getApiEndpoint(API.USER + endpoints.RESETPASSWORD + '/' + resetpasswordtoken)
+    }
+
+    return axios(requestOptions)
+      .then(function (response) {
+        return handleResponse(response)
+      })
+      .catch(function (error) {
+        return handleError(error)
+      })
+  }
+
+  doResetPassword (resetpasswordtoken, email, username, password) {
+    const requestOptions = {
+      method: 'post',
+      headers: { 'Content-Type': 'application/json' },
+      url: getApiEndpoint(API.USER + endpoints.RESETPASSWORD),
+      data: {
+        resetpasswordtoken: resetpasswordtoken,
+        email: email,
+        username: username,
+        password: password
+      }
+    }
+
+    return axios(requestOptions)
+      .then(function (response) {
+        return handleResponse(response)
+      })
+      .catch(function (error) {
+        return handleError(error)
+      })
+  }
+
+  /**
    * Register a new user.
    * @param {string} firstname The user's firstname.
    * @param {string} lastname The user's lastname.

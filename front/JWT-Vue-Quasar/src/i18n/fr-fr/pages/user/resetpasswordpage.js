@@ -15,6 +15,7 @@ export default {
   error: {
     tokennotvalid: 'Le jeton de réinitialisation du mot de passe n\'est pas valide.',
     tokennotfound: 'Le jeton de réinitialisation du mot de passe n\'a pas été trouvé.',
+    tokenisvaliderror: 'Impossible de vérifier le token.',
     resetpasswordfailure: 'Impossible de réinitialiser le mot de passe.'
   },
   success: {
