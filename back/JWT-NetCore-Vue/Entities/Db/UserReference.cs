@@ -13,7 +13,6 @@
     /// <summary>
     /// Obtient ou définit l'Id de l'utilisateur.
     /// </summary>
-    [BsonRepresentation(BsonType.ObjectId)]
     public Guid Id { get; set; }
 
     /// <summary>

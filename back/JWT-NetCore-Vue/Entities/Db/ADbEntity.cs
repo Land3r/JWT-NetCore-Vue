@@ -1,6 +1,8 @@
 ﻿namespace JWTNetCoreVue.Entities.Db
 {
-  using System;
+    using MongoDB.Bson;
+    using MongoDB.Bson.Serialization.Attributes;
+    using System;
 
   /// <summary>
   /// Classe abstraite ADbEntity.
@@ -11,6 +13,7 @@
     /// <summary>
     /// Obtient ou définit l'id de l'entitée.
     /// </summary>
+    [BsonId]
     public Guid Id { get; set; }
   }
 }
