@@ -79,7 +79,7 @@
       {
         // Generation du token JWT.
         var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes(_appSettings.JWT.Secret);
+        var key = Encoding.ASCII.GetBytes(_appSettings.Security.JWT.Secret);
         var tokenDescriptor = new SecurityTokenDescriptor
         {
           Subject = new ClaimsIdentity(new Claim[]
@@ -87,7 +87,7 @@
             new Claim(ClaimTypes.Name, user.Id.ToString()),
             new Claim(ClaimTypes.Email, user.Email.ToString(CultureInfo.InvariantCulture))
           }),
-          Expires = DateTime.UtcNow.AddDays(_appSettings.JWT.DurationInDays),
+          Expires = DateTime.UtcNow.AddDays(_appSettings.Security.JWT.DurationInDays),
           SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
         SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);

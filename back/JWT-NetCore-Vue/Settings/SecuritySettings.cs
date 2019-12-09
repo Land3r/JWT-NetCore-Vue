@@ -10,5 +10,10 @@
     /// Obtient ou définit le hash utilisé dans la génération des hashs.
     /// </summary>
     public string HashSalt { get; set; }
+
+    /// <summary>
+    /// Obtient ou définit la configuration utilisée pour configurer l'authentification JWT.
+    /// </summary>
+    public JWTSettings JWT { get; set; }
   }
 }

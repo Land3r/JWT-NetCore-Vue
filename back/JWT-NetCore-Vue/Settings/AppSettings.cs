@@ -7,9 +7,9 @@
   public class AppSettings
   {
     /// <summary>
-    /// Obtient ou définit la configuration utilisée pour configurer l'authentification JWT.
+    /// Obtient ou définit la configuration de l'environnement.
     /// </summary>
-    public JWTSettings JWT { get; set; }
+    public EnvironmentSettings Environment { get; set; }
 
     /// <summary>
     /// Obtient ou définit la configuration utilisée pour configurer la connection à la base de données.
