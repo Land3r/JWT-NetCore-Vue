@@ -67,7 +67,7 @@ export default {
       this.isLoading = true
 
       const userservice = new UserService()
-      userservice.doForgotPassword(this.form.username, this.form.password).then((response) => {
+      userservice.doForgotPassword(this.form.username, this.form.email).then((response) => {
         this.isLoading = false
         this.$q.notify({ ...NotifySuccess, message: this.$t('forgotpasswordpage.success.sendsuccess', { username: xss(response.username) }), html: true })
       }).catch((response) => {
