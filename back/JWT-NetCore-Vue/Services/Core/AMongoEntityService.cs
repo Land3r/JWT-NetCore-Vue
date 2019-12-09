@@ -71,8 +71,34 @@
     /// <returns>L'entitée créée.</returns>
     public virtual TEntity Create(TEntity elm)
     {
-      Entities.InsertOne(elm);
+      if (elm is IDbTrackedEntity)
+      {
+        IDbTrackedEntity elmTracked = elm as IDbTrackedEntity;
+        if (elmTracked.Created == null)
+        {
+          (elm as IDbTrackedEntity).Created = DateTime.UtcNow;
+        }
+        if (elmTracked.Updated == DateTime.MinValue)
+        {
+          (elm as IDbTrackedEntity).Updated = (elm as IDbTrackedEntity).Created;
+        }
+        if (elmTracked.CreatedBy == null)
+        {
+          (elm as IDbTrackedEntity).CreatedBy = new UserReference()
+          {
+            Id = new Guid(),
+            Username = "System"
+          };
+        }
+        if (elmTracked.UpdatedBy == null)
+        {
+          (elm as IDbTrackedEntity).UpdatedBy = (elm as IDbTrackedEntity).CreatedBy;
+        }
+      }
+
       // Id field is automatically populated.
+      Entities.InsertOne(elm);
+
       return elm;
     }
 
@@ -82,6 +108,17 @@
     /// <param name="elmIn">Les données de l'entitée mise à jour.</param>
     public virtual ReplaceOneResult Update(TEntity elmIn)
     {
+      if (elmIn is IDbTrackedEntity)
+      {
+        IDbTrackedEntity elmTracked = elmIn as IDbTrackedEntity;
+        (elmIn as IDbTrackedEntity).Updated = DateTime.UtcNow;
+        (elmIn as IDbTrackedEntity).UpdatedBy = new UserReference()
+        {
+          Id = Guid.NewGuid(),
+          Username = "System" //TODO.
+        };
+      }
+
       return Entities.ReplaceOne(book => book.Id == elmIn.Id, elmIn);
     }
 
@@ -92,6 +129,17 @@
     /// <param name="elmIn">Les données de l'entitée mise à jour.</param>
     public virtual ReplaceOneResult Update(Guid id, TEntity elmIn)
     {
+      if (elmIn is IDbTrackedEntity)
+      {
+        IDbTrackedEntity elmTracked = elmIn as IDbTrackedEntity;
+        (elmIn as IDbTrackedEntity).Updated = DateTime.UtcNow;
+        (elmIn as IDbTrackedEntity).UpdatedBy = new UserReference()
+        {
+          Id = Guid.NewGuid(),
+          Username = "System" //TODO.
+        };
+      }
+
       return Entities.ReplaceOne(book => book.Id == id, elmIn);
     }
 
