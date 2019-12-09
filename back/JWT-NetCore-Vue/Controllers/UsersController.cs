@@ -8,20 +8,27 @@
   using JWTNetCoreVue.Helpers;
   using JWTNetCoreVue.Models.Users;
   using JWTNetCoreVue.Services;
+  using JWTNetCoreVue.Settings;
   using Microsoft.AspNetCore.Authorization;
   using Microsoft.AspNetCore.Mvc;
   using Microsoft.Extensions.Localization;
   using Microsoft.Extensions.Logging;
+  using Microsoft.Extensions.Options;
 
   /// <summary>
   /// Classe de controlleur UsersController.
-  /// Controlleur pour les <see cref="User">Utilisateurs</see>
+  /// Controlleur pour les <see cref="User">Utilisateurs</see>.
   /// </summary>
   [Authorize]
   [ApiController]
   [Route("api/[controller]")]
   public class UsersController : ControllerBase
   {
+    /// <summary>
+    /// La configuration de l'application.
+    /// </summary>
+    private readonly AppSettings _appSettings;
+
     /// <summary>
     /// Le service des utilisateurs.
     /// </summary>
@@ -50,17 +57,20 @@
     /// <summary>
     /// Instancie une nouvelle instance de <see cref="UsersController"/>.
     /// </summary>
+    /// <param name="appSettings">La configuration de l'application.</param>
     /// <param name="userService">Le <see cref="IUserService"/>.</param>
     /// <param name="userPasswordResetTokenService">Le <see cref="IUserPasswordResetTokenService"/>.</param>
     /// <param name="emailService">Le <see cref="IEmailService"/>.</param>
     /// <param name="logger">Le logger utilisé.</param>
     /// <param name="localizer">Les ressources localisées.</param>
-    public UsersController(IUserService userService,
+    public UsersController(IOptions<AppSettings> appSettings,
+      IUserService userService,
       IUserPasswordResetTokenService userPasswordResetTokenService,
       IEmailService emailService,
       ILogger<UsersController> logger,
       IStringLocalizer<UsersController> localizer)
     {
+      _appSettings = appSettings.Value;
       _userService = userService;
       _userPasswordResetTokenService = userPasswordResetTokenService;
       _emailService = emailService;
@@ -185,8 +195,12 @@
         userPasswordResetToken = _userPasswordResetTokenService.Create(userPasswordResetToken);
 
         // Envoie de l'email, avec le token en clair.
-        // TODO.
-        _emailService.SendTemplate(user.Email, "PasswordLost", new { username = user.Username, token = token });
+        _emailService.SendTemplate(new EmailAddress() { Address = user.Email, Name = user.Username }, "PasswordLost", new
+        {
+          username = user.Username,
+          resetpasswordlink = $"{new Uri(new Uri(_appSettings.Environment.FrontUrl), $"#/resetpassword/{token}")}",
+          sitename = _appSettings.Environment.Name
+        });
       }
       catch (Exception ex)
       {

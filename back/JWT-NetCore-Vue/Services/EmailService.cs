@@ -1,28 +1,23 @@
 namespace JWTNetCoreVue.Services
 {
+  using System;
   using JWTNetCoreVue.Entities.Emails;
   using JWTNetCoreVue.Services.Core;
   using JWTNetCoreVue.Settings;
   using Microsoft.AspNetCore.Mvc;
   using Microsoft.Extensions.Localization;
-  using Microsoft.Extensions.Logging;
   using Microsoft.Extensions.Options;
-  using System;
+  using Microsoft.Extensions.Logging;
   using JWTNetCoreVue.Extensions;
-  using System.Collections.Generic;
-  using System.Linq;
-  using System.Net;
-  using System.Threading.Tasks;
-    using MailKit.Net.Smtp;
-    using MimeKit;
-    using MimeKit.Text;
+  using MailKit.Net.Smtp;
+  using MimeKit;
+  using MimeKit.Text;
 
-
-    /// <summary>
-    /// Classe <see cref="EmailService"/>.
-    /// Service permettant de gérer les échanges emails de l'application.
-    /// </summary>
-    public class EmailService : ALoggedLocalizedService<EmailService>, IEmailService, IDisposable
+  /// <summary>
+  /// Classe <see cref="EmailService"/>.
+  /// Service permettant de gérer les échanges emails de l'application.
+  /// </summary>
+  public class EmailService : ALoggedLocalizedService<EmailService>, IEmailService, IDisposable
   {
     /// <summary>
     /// La configuration de l'application.
@@ -33,7 +28,6 @@ namespace JWTNetCoreVue.Services
     /// Le service des templates emails.
     /// </summary>
     public IEmailTemplateService _emailTemplateService;
-
 
     /// <summary>
     /// L'instance du client smtp.
@@ -78,15 +72,7 @@ namespace JWTNetCoreVue.Services
       }
     }
 
-    //>TODO: Remplacer address par le type concret.
-    private bool Send(string address, string subject, string body)
-    {
-      //TODO: Remplacer par le code.
-
-      return true;
-    }
-
-    public bool SendTemplate(string address, string templateName, dynamic values)
+    public void SendTemplate(EmailAddress address, string templateName, dynamic values)
     {
       if (string.IsNullOrEmpty(templateName))
       {
@@ -102,7 +88,7 @@ namespace JWTNetCoreVue.Services
       // We need to call explicitly the extension method because it uses dynamic type parameters.
       Tuple<string, string> email = EmailTemplateExtension.Compile(emailTemplate, values);
 
-      return this.Send(address, email.Item1, email.Item2);
+      this.Send(address, email.Item1, email.Item2);
     }
 
     /// <summary>
@@ -126,7 +112,7 @@ namespace JWTNetCoreVue.Services
     }
 
     /// <summary>
-    /// Envoie un email
+    /// Envoie un email.
     /// </summary>
     /// <param name="address">L'<see cref="EmailAddress"/> de la personne a contacter.</param>
     /// <param name="subject">Le sujet de l'email.</param>
@@ -190,6 +176,20 @@ namespace JWTNetCoreVue.Services
       try
       {
         Send(address, subject, body);
+        return true;
+      }
+      catch (Exception ex)
+      {
+        Logger.LogCritical(ex, "Error while sending email.");
+        return false;
+      }
+    }
+
+    public bool TrySendTemplate(EmailAddress address, string templateName, dynamic values)
+    {
+      try
+      {
+        SendTemplate(address, templateName, values);
         return true;
       }
       catch (Exception ex)
