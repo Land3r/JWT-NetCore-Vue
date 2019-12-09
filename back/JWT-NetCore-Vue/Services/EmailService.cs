@@ -12,15 +12,17 @@ namespace JWTNetCoreVue.Services
   using System.Collections.Generic;
   using System.Linq;
   using System.Net;
-  using System.Net.Mail;
   using System.Threading.Tasks;
+    using MailKit.Net.Smtp;
+    using MimeKit;
+    using MimeKit.Text;
 
 
-  /// <summary>
-  /// Classe <see cref="EmailService"/>.
-  /// Service permettant de gérer les échanges emails de l'application.
-  /// </summary>
-  public class EmailService : ALoggedLocalizedService<EmailService>, IEmailService, IDisposable
+    /// <summary>
+    /// Classe <see cref="EmailService"/>.
+    /// Service permettant de gérer les échanges emails de l'application.
+    /// </summary>
+    public class EmailService : ALoggedLocalizedService<EmailService>, IEmailService, IDisposable
   {
     /// <summary>
     /// La configuration de l'application.

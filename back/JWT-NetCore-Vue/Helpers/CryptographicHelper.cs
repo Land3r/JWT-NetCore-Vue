@@ -1,8 +1,7 @@
 ﻿namespace JWTNetCoreVue.Helpers
 {
   using System;
-    using System.Collections.Generic;
-    using System.Globalization;
+  using System.Globalization;
   using System.Linq;
   using System.Security.Cryptography;
   using System.Text;
@@ -81,6 +80,12 @@
       return ByteArrayToString(result);
     }
 
+    /// <summary>
+    /// Génère un hash d'une valeur, prefixé par un salt.
+    /// </summary>
+    /// <param name="clear">La valeur en clair à hasher (sous forme binaire).</param>
+    /// <param name="salt">Le salt à utiliser.</param>
+    /// <returns>La valeur hashée.</returns>
     public static byte[] GetHash(byte[] clear, byte[] salt)
     {
       byte[] data = clear.Concat(salt).ToArray();
@@ -89,6 +94,12 @@
       return result;
     }
 
+    /// <summary>
+    /// Génère un hash d'une chaine de charactères en UTF8.
+    /// </summary>
+    /// <param name="clear">La valeur en clair à hasher (sous forme de texte).</param>
+    /// <param name="salt">Le salt à utiliser.</param>
+    /// <returns>La valeur hashée.</returns>
     public static string GetHash(string clear, string salt)
     {
       string saltedclear = string.Concat(salt, clear);

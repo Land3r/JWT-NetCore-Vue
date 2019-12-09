@@ -1,8 +1,7 @@
 ﻿namespace JWTNetCoreVue.Entities.Db
 {
-    using MongoDB.Bson;
-    using MongoDB.Bson.Serialization.Attributes;
     using System;
+    using MongoDB.Bson.Serialization.Attributes;
 
   /// <summary>
   /// Classe abstraite ADbEntity.

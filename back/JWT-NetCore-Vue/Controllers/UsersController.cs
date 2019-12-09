@@ -1,17 +1,17 @@
 ﻿namespace JWTNetCoreVue.Controllers
 {
+  using System;
   using System.Globalization;
+  using JWTNetCoreVue.Entities.Db;
+  using JWTNetCoreVue.Entities.Emails;
+  using JWTNetCoreVue.Entities.Users;
+  using JWTNetCoreVue.Helpers;
+  using JWTNetCoreVue.Models.Users;
   using JWTNetCoreVue.Services;
   using Microsoft.AspNetCore.Authorization;
   using Microsoft.AspNetCore.Mvc;
-  using Microsoft.Extensions.Logging;
   using Microsoft.Extensions.Localization;
-  using System;
-  using JWTNetCoreVue.Entities.Emails;
-  using JWTNetCoreVue.Entities.Users;
-  using JWTNetCoreVue.Models.Users;
-  using JWTNetCoreVue.Helpers;
-  using JWTNetCoreVue.Entities.Db;
+  using Microsoft.Extensions.Logging;
 
   /// <summary>
   /// Classe de controlleur UsersController.
@@ -186,7 +186,7 @@
 
         // Envoie de l'email, avec le token en clair.
         // TODO.
-        _emailService.SendTemplate(user.Email, "PasswordLost", new { username = user.Username, token = token});
+        _emailService.SendTemplate(user.Email, "PasswordLost", new { username = user.Username, token = token });
       }
       catch (Exception ex)
       {
