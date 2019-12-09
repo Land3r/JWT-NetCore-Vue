@@ -24,5 +24,7 @@
     /// <param name="body">Le body de l'email (au format html).</param>
     /// <returns>Si l'envoi d'email a reussi ou non.</returns>
     bool TrySend(EmailAddress address, string subject, string body);
+
+    bool SendTemplate(string address, string templateName, dynamic values);
   }
 }

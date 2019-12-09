@@ -14,7 +14,6 @@
     /// Obtient ou définit l'id de l'entitée.
     /// </summary>
     [BsonId]
-    [BsonRepresentation(BsonType.ObjectId)]
     public Guid Id { get; set; }
   }
 }

@@ -3,7 +3,7 @@
     <app-transition>
       <app-publiccard>
         <q-card-section class="bg-primary text-white">
-          <div class="text-h6"><q-icon name="perm_identity" size="md" left/>{{$t('loginpage.title')}}</div>
+          <div class="text-h6"><q-img src="statics/app-logo-128x128.png" class="on-left" style="width:32px; height:32px;" left/>{{$t('loginpage.title')}}</div>
         </q-card-section>
         <q-separator />
         <q-card-section>

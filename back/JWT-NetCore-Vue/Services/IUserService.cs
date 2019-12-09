@@ -1,7 +1,7 @@
 ﻿namespace JWTNetCoreVue.Services
 {
-  using JWTNetCoreVue.Entities;
-  using JWTNetCoreVue.Models;
+  using JWTNetCoreVue.Entities.Users;
+  using JWTNetCoreVue.Models.Users;
   using JWTNetCoreVue.Services.Core;
 
   /// <summary>

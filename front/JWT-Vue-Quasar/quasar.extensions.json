@@ -17,10 +17,14 @@
     "__internal": {
       "dev": {
         "spa": {
-          "iconHash": "4ccb11f8fcf30f338d32859047fd3ad3"
+          "iconHash": "28cb2cb8ae5f56f86be700b645681791"
         }
       },
-      "build": {}
+      "build": {
+        "spa": {
+          "iconHash": "28cb2cb8ae5f56f86be700b645681791"
+        }
+      }
     }
   }
 }

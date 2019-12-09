@@ -129,6 +129,18 @@
   <data name="LogLoginTry" xml:space="preserve">
     <value>Tentative d'authentification pour l'utilisateur {0}.</value>
   </data>
+  <data name="LogPasswordLostTokenTry" xml:space="preserve">
+    <value>Tentative de réinitilisation du mot de passe d'un compte utilisateur.</value>
+  </data>
+  <data name="LogPasswordLostTokenUserFailed" xml:space="preserve">
+    <value>Impossible de générer le token de réinitialisation du mot de passe .</value>
+  </data>
+  <data name="LogPasswordLostTokenUserNotFound" xml:space="preserve">
+    <value>L'utilisateur identifié avec {method} {value} n'a pas été trouvé.</value>
+  </data>
+  <data name="LogPasswordLostTokenUserSuccess" xml:space="preserve">
+    <value>Token de réinitialisation du mot de passe généré pour l'utilisateur {value}</value>
+  </data>
   <data name="LogRegisterFailed" xml:space="preserve">
     <value>Le compte {0} n'a pas pu être créé.</value>
   </data>

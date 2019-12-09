@@ -24,6 +24,11 @@ const routes = [
         component: () => import('pages/user/ForgotPasswordPage.vue')
       },
       {
+        name: 'ResetPasswordPage',
+        path: '/resetpassword/:resetpasswordtoken',
+        component: () => import('pages/user/ResetPasswordPage.vue')
+      },
+      {
         path: '/',
         redirect: { name: 'LoginPage' }
       }

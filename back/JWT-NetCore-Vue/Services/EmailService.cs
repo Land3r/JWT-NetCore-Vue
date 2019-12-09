@@ -1,17 +1,21 @@
-﻿using JWTNetCoreVue.Entities.Emails;
-using JWTNetCoreVue.Services.Core;
-using JWTNetCoreVue.Settings;
-using MailKit.Net.Smtp;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using MimeKit;
-using MimeKit.Text;
-using System;
-
 namespace JWTNetCoreVue.Services
 {
+  using JWTNetCoreVue.Entities.Emails;
+  using JWTNetCoreVue.Services.Core;
+  using JWTNetCoreVue.Settings;
+  using Microsoft.AspNetCore.Mvc;
+  using Microsoft.Extensions.Localization;
+  using Microsoft.Extensions.Logging;
+  using Microsoft.Extensions.Options;
+  using System;
+  using JWTNetCoreVue.Extensions;
+  using System.Collections.Generic;
+  using System.Linq;
+  using System.Net;
+  using System.Net.Mail;
+  using System.Threading.Tasks;
+
+
   /// <summary>
   /// Classe <see cref="EmailService"/>.
   /// Service permettant de gérer les échanges emails de l'application.
@@ -22,6 +26,12 @@ namespace JWTNetCoreVue.Services
     /// La configuration de l'application.
     /// </summary>
     private AppSettings _appSettings;
+
+    /// <summary>
+    /// Le service des templates emails.
+    /// </summary>
+    public IEmailTemplateService _emailTemplateService;
+
 
     /// <summary>
     /// L'instance du client smtp.
@@ -44,6 +54,7 @@ namespace JWTNetCoreVue.Services
     /// <param name="logger">Le logger utilisé.</param>
     public EmailService([FromServices]IStringLocalizer<EmailService> localizer,
       IOptions<AppSettings> appSettings,
+      IEmailTemplateService emailTemplateService,
       [FromServices] ILogger<EmailService> logger) : base(logger, localizer)
     {
       if (appSettings == null)
@@ -54,6 +65,42 @@ namespace JWTNetCoreVue.Services
       {
         _appSettings = appSettings.Value;
       }
+
+      if (emailTemplateService == null)
+      {
+        throw new ArgumentNullException(nameof(emailTemplateService));
+      }
+      else
+      {
+        _emailTemplateService = emailTemplateService;
+      }
+    }
+
+    //>TODO: Remplacer address par le type concret.
+    private bool Send(string address, string subject, string body)
+    {
+      //TODO: Remplacer par le code.
+
+      return true;
+    }
+
+    public bool SendTemplate(string address, string templateName, dynamic values)
+    {
+      if (string.IsNullOrEmpty(templateName))
+      {
+        throw new ArgumentNullException(nameof(templateName));
+      }
+
+      EmailTemplate emailTemplate = _emailTemplateService.GetByName(templateName);
+      if (emailTemplate == null)
+      {
+        throw new ApplicationException($"EmailTemplate nammed {templateName} not found.");
+      }
+
+      // We need to call explicitly the extension method because it uses dynamic type parameters.
+      Tuple<string, string> email = EmailTemplateExtension.Compile(emailTemplate, values);
+
+      return this.Send(address, email.Item1, email.Item2);
     }
 
     /// <summary>

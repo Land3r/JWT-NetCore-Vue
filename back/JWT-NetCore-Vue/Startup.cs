@@ -73,7 +73,9 @@ namespace JWTNetCoreVue
 
       // configure DI for application services
       services.AddScoped<IUserService, UserService>();
+      services.AddScoped<IUserPasswordResetTokenService, UserPasswordResetTokenService>();
       services.AddScoped<IEmailService, EmailService>();
+      services.AddScoped<IEmailTemplateService, EmailTemplateService>();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
