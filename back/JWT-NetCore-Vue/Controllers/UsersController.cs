@@ -156,6 +156,28 @@
       }
     }
 
+    [AllowAnonymous]
+    [HttpGet("activate/{token}")]
+    public IActionResult Activate(string token)
+    {
+      _logger.LogDebug(string.Format(CultureInfo.InvariantCulture, _localizer["LogActivateTry"].Value));
+
+      if (string.IsNullOrEmpty(token))
+      {
+        throw new ArgumentNullException(nameof(token));
+      }
+
+      User user = _userService.Activate(token);
+
+      if (user == null)
+      {
+        _logger.LogDebug(string.Format(CultureInfo.InvariantCulture, _localizer["LogActivateNotFound"].Value, token));
+        return NotFound(new { message = string.Format(CultureInfo.InvariantCulture, _localizer["LogActivateNotFound"].Value, token) });
+      }
+
+      return Ok(new { message = string.Format(CultureInfo.InvariantCulture, _localizer["LogActivateSuccess"].Value, token) });
+    }
+
     /// <summary>
     /// Génére un token de réinitialisation de mot de passe utilisateur.
     /// </summary>

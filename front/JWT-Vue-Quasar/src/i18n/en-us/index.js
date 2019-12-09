@@ -7,6 +7,7 @@ import loginpage from './pages/user/loginpage'
 import forgotpasswordpage from './pages/user/forgotpasswordpage'
 import resetpasswordpage from './pages/user/resetpasswordpage'
 import registerpage from './pages/user/registerpage'
+import activatepage from './pages/user/activatepage'
 
 export default {
   ...common,
@@ -28,6 +29,9 @@ export default {
   },
   registerpage: {
     ...registerpage
+  },
+  activatepage: {
+    ...activatepage
   },
   loginform: {
     section: {

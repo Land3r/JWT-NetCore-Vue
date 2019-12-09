@@ -1,9 +1,9 @@
 ﻿namespace JWTNetCoreVue.Services.Core
 {
+    using System;
   using Microsoft.AspNetCore.Mvc;
   using Microsoft.Extensions.Localization;
   using Microsoft.Extensions.Logging;
-  using System;
 
   /// <summary>
   /// Classe abstraite <see cref="ALoggedLocalizedService{TService}"/>.

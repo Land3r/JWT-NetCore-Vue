@@ -165,6 +165,29 @@
     }
 
     /// <summary>
+    /// Active un compte utilisateur.
+    /// </summary>
+    /// <param name="token">Le token d'initialisation du compte utilisateur.</param>
+    /// <returns>L'utilisateur si correctement activé.</returns>
+    public User Activate(string token)
+    {
+      User user = Entities.Find(elm => elm.ActivationToken == token).FirstOrDefault();
+
+      if (user != null)
+      {
+        user.ActivationToken = null;
+        user.Active = true;
+        this.Update(user);
+
+        return user;
+      }
+      else
+      {
+        return null;
+      }
+    }
+
+    /// <summary>
     /// Crée un <see cref="User"/>.
     /// </summary>
     /// <param name="elm">Les données de le <see cref="User"/> a créé.</param>

@@ -19,6 +19,11 @@ const routes = [
         component: () => import('pages/user/RegisterPage.vue')
       },
       {
+        name: 'ActivatePage',
+        path: '/activate/:activationtoken',
+        component: () => import('pages/user/ActivatePage.vue')
+      },
+      {
         name: 'ForgotPasswordPage',
         path: '/forgotpassword',
         component: () => import('pages/user/ForgotPasswordPage.vue')

@@ -47,5 +47,12 @@
     /// <param name="model">L'<see cref="User"/> a créé.</param>
     /// <returns>L'utilisateur créé.</returns>
     User Register(User model);
+
+    /// <summary>
+    /// Rends actif un utilisateur.
+    /// </summary>
+    /// <param name="token">Le token d\'activation de l'utilisateur a activer.</param>
+    /// <returns>L'utilisateur activé.</returns>
+    User Activate(string token);
   }
 }

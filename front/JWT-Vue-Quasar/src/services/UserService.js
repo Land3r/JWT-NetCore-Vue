@@ -9,6 +9,7 @@ const endpoints = {
   'FORGOTPASSWORD': '/forgotpassword',
   'RESETPASSWORD': '/resetpassword',
   'REGISTER': '/register',
+  'ACTIVATE': '/activate',
   'GET': ''
 }
 
@@ -195,6 +196,22 @@ export default class UserService {
         email: email,
         password: password
       }
+    }
+
+    return axios(requestOptions)
+      .then(function (response) {
+        return handleResponse(response)
+      })
+      .catch(function (error) {
+        return handleError(error)
+      })
+  }
+
+  doActivate (activationtoken) {
+    const requestOptions = {
+      method: 'get',
+      headers: { 'Content-Type': 'application/json' },
+      url: getApiEndpoint(API.USER + endpoints.ACTIVATE + '/' + activationtoken)
     }
 
     return axios(requestOptions)
