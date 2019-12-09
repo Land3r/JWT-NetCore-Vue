@@ -199,7 +199,8 @@
         {
           username = user.Username,
           resetpasswordlink = $"{new Uri(new Uri(_appSettings.Environment.FrontUrl), $"#/resetpassword/{token}")}",
-          sitename = _appSettings.Environment.Name
+          sitename = _appSettings.Environment.Name,
+          siteurl = _appSettings.Environment.FrontUrl
         });
       }
       catch (Exception ex)
