@@ -1,7 +1,5 @@
 ﻿namespace JWTNetCoreVue.Services.Emails
 {
-  using System;
-  using System.Reflection;
   using JWTNetCoreVue.Entities.Emails;
   using JWTNetCoreVue.Services.Core;
   using JWTNetCoreVue.Settings;

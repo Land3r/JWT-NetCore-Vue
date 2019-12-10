@@ -30,7 +30,7 @@
     /// <summary>
     /// Retire le mot de passe d'un <see cref="User">Utilisateur</see>.
     /// </summary>
-    /// <param name="users">L'<see cref="User">Utilisateur</see>.</param>
+    /// <param name="user">L'<see cref="User">Utilisateur</see>.</param>
     /// <returns>L'<see cref="User">Utilisateur</see> sans le mots de passe.</returns>
     public static User WithoutPassword(this User user)
     {

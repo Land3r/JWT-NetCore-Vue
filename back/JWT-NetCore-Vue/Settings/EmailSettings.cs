@@ -1,5 +1,9 @@
 ﻿namespace JWTNetCoreVue.Settings
 {
+  /// <summary>
+  /// Classe <see cref="EmailSettings"/>.
+  /// Classe de configuration pour les emails de l'applications.
+  /// </summary>
   public class EmailSettings
   {
     /// <summary>

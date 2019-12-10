@@ -3,8 +3,8 @@
   using System.ComponentModel.DataAnnotations;
 
   /// <summary>
-  /// Classe UserAuthenticateModel.
-  /// Classe permettant de venir s'authentifier auprès du service des Utilisateurs
+  /// Classe <see cref="UserAuthenticateModel"/>.
+  /// Classe permettant de venir s'authentifier auprès du service des Utilisateurs.
   /// </summary>
   public class UserAuthenticateModel
   {

@@ -5,10 +5,14 @@
   using MongoDB.Bson;
   using MongoDB.Bson.Serialization.Attributes;
 
+  /// <summary>
+  /// Classe <see cref="UserPasswordResetToken"/>.
+  /// Permet de demander une réinitialisation d'un compte utilisateur.
+  /// </summary>
   public class UserPasswordResetToken : ADbTrackedEntity
   {
     /// <summary>
-    /// Obtient ou définit le token de réinitialisation du mot de passe d'un <see cref="User"/>
+    /// Obtient ou définit le token de réinitialisation du mot de passe d'un <see cref="User"/>.
     /// </summary>
     [BsonRepresentation(BsonType.String)]
     public string Token { get; set; }
