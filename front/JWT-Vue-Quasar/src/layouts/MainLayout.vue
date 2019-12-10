@@ -27,12 +27,15 @@
             >
               <q-list style="min-width: 100px">
                 <q-item clickable>
-                  <q-item-section>{{$t('mainlayout.user.nothing')}}</q-item-section>
+                  <q-item-section avatar>
+                    <q-icon color="primary" name="perm_identity" />
+                  </q-item-section>
+                  <q-item-section>{{$t('mainlayout.user.profile')}}</q-item-section>
                 </q-item>
                 <q-separator />
                 <q-item clickable @click="doDisconnect">
                   <q-item-section avatar>
-                    <q-icon color="primary" name="close" />
+                    <q-icon color="negative" name="close" />
                   </q-item-section>
                   <q-item-section>{{$t('mainlayout.user.disconnect')}}</q-item-section>
                 </q-item>
@@ -50,7 +53,17 @@
       content-class="app-menu"
     >
       <q-list>
-        <q-item-label header>Essential Links</q-item-label>
+        <q-item-label header>JWT-NetCore-Vue</q-item-label>
+          <q-item clickable tag="a" target="_blank" href="https://github.quasar.dev">
+          <q-item-section avatar>
+            <q-icon name="code" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Github</q-item-label>
+            <q-item-label caption>github.com/Land3r/JWT-NetCore-Vue</q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item-label header>Quasar Links</q-item-label>
         <q-item clickable tag="a" target="_blank" href="https://quasar.dev">
           <q-item-section avatar>
             <q-icon name="school" />

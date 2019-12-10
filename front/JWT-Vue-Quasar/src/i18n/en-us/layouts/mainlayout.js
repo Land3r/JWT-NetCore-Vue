@@ -1,6 +1,6 @@
 export default {
   user: {
-    nothing: 'Nothing to see here :(',
+    profile: 'Profile',
     disconnect: 'Disconnect'
   }
 }
