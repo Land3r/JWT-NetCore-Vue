@@ -1,10 +1,10 @@
 namespace JWTNetCoreVue
 {
   using System;
-  using NLog.Web;
   using Microsoft.AspNetCore.Hosting;
-  using Microsoft.Extensions.Logging;
   using Microsoft.Extensions.Hosting;
+  using Microsoft.Extensions.Logging;
+  using NLog.Web;
 
   /// <summary>
   /// Classe Program.
@@ -27,7 +27,7 @@ namespace JWTNetCoreVue
       }
       catch (Exception exception)
       {
-        //NLog: catch setup errors
+        // NLog: catch setup errors
         logger.Error(exception, "Impossible to build the host.");
         throw;
       }

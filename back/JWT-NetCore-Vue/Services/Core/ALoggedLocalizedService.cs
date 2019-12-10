@@ -1,6 +1,6 @@
 ﻿namespace JWTNetCoreVue.Services.Core
 {
-    using System;
+  using System;
   using Microsoft.AspNetCore.Mvc;
   using Microsoft.Extensions.Localization;
   using Microsoft.Extensions.Logging;
@@ -13,16 +13,14 @@
   public abstract class ALoggedLocalizedService<TService> : ALoggedService<TService>, ILocalizedService<TService>
   {
     /// <summary>
-    /// Obtient les ressources localisées.
-    /// </summary>
-    public IStringLocalizer<TService> Localizer { get; private set; }
-
-    /// <summary>
-    /// Initialise une nouvelle instance de la classe <see cref="ALoggedLocalizedService{TService}"/>
+    /// Initialise une nouvelle instance de la classe <see cref="ALoggedLocalizedService{TService}"/>.
     /// </summary>
     /// <param name="logger">Le logger à utiliser.</param>
     /// <param name="localizer">Les ressouces localisées à utiliser.</param>
-    public ALoggedLocalizedService(ILogger<TService> logger, [FromServices]IStringLocalizer<TService> localizer) : base(logger)
+    public ALoggedLocalizedService(
+      ILogger<TService> logger,
+      [FromServices]IStringLocalizer<TService> localizer)
+      : base(logger)
     {
       if (localizer == null)
       {
@@ -30,8 +28,13 @@
       }
       else
       {
-        Localizer = localizer;
+        this.Localizer = localizer;
       }
     }
+
+    /// <summary>
+    /// Obtient les ressources localisées.
+    /// </summary>
+    public IStringLocalizer<TService> Localizer { get; private set; }
   }
 }

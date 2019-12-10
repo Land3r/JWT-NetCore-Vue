@@ -1,16 +1,16 @@
 ﻿namespace JWTNetCoreVue.Services
 {
+  using System;
   using JWTNetCoreVue.Entities.Users;
   using JWTNetCoreVue.Models.Users;
   using JWTNetCoreVue.Services.Core;
-    using MongoDB.Driver;
-    using System;
+  using MongoDB.Driver;
 
-    /// <summary>
-    /// Interface IUSerService.
-    /// Interface pour le service des utilisateurs.
-    /// </summary>
-    public interface IUserService : ICrudService<User>
+  /// <summary>
+  /// Interface IUSerService.
+  /// Interface pour le service des utilisateurs.
+  /// </summary>
+  public interface IUserService : ICrudService<User>
   {
     /// <summary>
     /// Authentifie un <see cref="User"/>, basé sur le <see cref="UserAuthenticateModel"/> fourni.

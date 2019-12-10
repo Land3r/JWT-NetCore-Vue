@@ -1,24 +1,19 @@
 ﻿namespace JWTNetCoreVue.Services.Core
 {
+  using System;
   using Microsoft.AspNetCore.Mvc;
   using Microsoft.Extensions.Localization;
-  using System;
 
   /// <summary>
-  /// Classe abstraite <see cref="ALocalizedService{T}"/>
+  /// Classe abstraite <see cref="ALocalizedService{T}"/>.
   /// </summary>
   /// <typeparam name="T">Le type sous jaccent du namespace a localiser.</typeparam>
   public abstract class ALocalizedService<T> : ILocalizedService<T>
   {
     /// <summary>
-    /// Obtient les ressources localisées.
+    /// Initialise une nouvelle instance de <see cref="ALocalizedService{T}"/>.
     /// </summary>
-    public IStringLocalizer<T> Localizer { get; private set; }
-
-    /// <summary>
-    /// Initialise une nouvelle instance de <see cref="ALocalizedService{T}"/>
-    /// </summary>
-    /// <param name=""></param>
+    /// <param name="localizer">Les ressources de localisation.</param>
     public ALocalizedService([FromServices] IStringLocalizer<T> localizer)
     {
       if (localizer == null)
@@ -27,8 +22,13 @@
       }
       else
       {
-        Localizer = localizer;
+        this.Localizer = localizer;
       }
     }
+
+    /// <summary>
+    /// Obtient les ressources localisées.
+    /// </summary>
+    public IStringLocalizer<T> Localizer { get; private set; }
   }
 }

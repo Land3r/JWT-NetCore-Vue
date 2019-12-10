@@ -15,17 +15,20 @@
     /// <summary>
     /// L'alphabet utilisé pour convertir en base62.
     /// </summary>
-    private const string _alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-.";
+    private const string Alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-.";
 
     /// <summary>
     /// Génère un token de la longueur demandée pouvant être transmis via un paramètre GET sans necessiter d'encodage.
     /// </summary>
-    /// <param name="length">La longueur du token à générer</param>
+    /// <param name="length">La longueur du token à générer.</param>
     /// <returns>Le token généré.</returns>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1055:Uri return values should not be strings", Justification = "This is not meant to produce Uri.")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0063:Use simple 'using' statement", Justification = "Simple design is too concive.")]
     public static string GetUrlSafeToken(int length)
     {
       if (length == 0)
       {
+        // TODO
         throw new ArgumentException("Length must be greater than 0", nameof(length));
       }
 
@@ -35,9 +38,9 @@
         rnd.GetBytes(tokenBytes);
         var token = Enumerable
                       .Range(0, length)
-                      .Select(i => _alphabet[tokenBytes[i] % _alphabet.Length])
+                      .Select(i => Alphabet[tokenBytes[i] % Alphabet.Length])
                       .ToArray();
-        return new String(token);
+        return new string(token);
       }
     }
 
@@ -121,6 +124,7 @@
       {
         hex.AppendFormat(CultureInfo.InvariantCulture, "{0:x2}", b);
       }
+
       return hex.ToString();
     }
   }

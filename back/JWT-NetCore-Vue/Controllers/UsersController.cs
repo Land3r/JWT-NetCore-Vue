@@ -2,7 +2,6 @@
 {
   using System;
   using System.Globalization;
-  using System.Net;
   using JWTNetCoreVue.Entities.Db;
   using JWTNetCoreVue.Entities.Emails;
   using JWTNetCoreVue.Entities.Users;
@@ -28,32 +27,32 @@
     /// <summary>
     /// La configuration de l'application.
     /// </summary>
-    private readonly AppSettings _appSettings;
+    private readonly AppSettings appSettings;
 
     /// <summary>
     /// Le service des utilisateurs.
     /// </summary>
-    private readonly IUserService _userService;
+    private readonly IUserService userService;
 
     /// <summary>
     /// Le service de réinitialisation des mots de passes utilisateurs.
     /// </summary>
-    private readonly IUserPasswordResetTokenService _userPasswordResetTokenService;
+    private readonly IUserPasswordResetTokenService userPasswordResetTokenService;
 
     /// <summary>
     /// Le service email.
     /// </summary>
-    private readonly IEmailService _emailService;
+    private readonly IEmailService emailService;
 
     /// <summary>
     /// Le Logger utilisé par le controller.
     /// </summary>
-    private readonly ILogger<UsersController> _logger;
+    private readonly ILogger<UsersController> logger;
 
     /// <summary>
     /// Les ressources de langue.
     /// </summary>
-    private readonly IStringLocalizer<UsersController> _localizer;
+    private readonly IStringLocalizer<UsersController> localizer;
 
     /// <summary>
     /// Instancie une nouvelle instance de <see cref="UsersController"/>.
@@ -64,42 +63,43 @@
     /// <param name="emailService">Le <see cref="IEmailService"/>.</param>
     /// <param name="logger">Le logger utilisé.</param>
     /// <param name="localizer">Les ressources localisées.</param>
-    public UsersController(IOptions<AppSettings> appSettings,
+    public UsersController(
+      IOptions<AppSettings> appSettings,
       IUserService userService,
       IUserPasswordResetTokenService userPasswordResetTokenService,
       IEmailService emailService,
       ILogger<UsersController> logger,
       IStringLocalizer<UsersController> localizer)
     {
-      _appSettings = appSettings.Value;
-      _userService = userService;
-      _userPasswordResetTokenService = userPasswordResetTokenService;
-      _emailService = emailService;
-      _logger = logger;
-      _localizer = localizer;
+      this.appSettings = appSettings?.Value;
+      this.userService = userService;
+      this.userPasswordResetTokenService = userPasswordResetTokenService;
+      this.emailService = emailService;
+      this.logger = logger;
+      this.localizer = localizer;
     }
 
     /// <summary>
-    /// Authentifie un <see cref="User">Utilisateur</see>
+    /// Authentifie un <see cref="User">Utilisateur</see>.
     /// </summary>
-    /// <param name="model">Le <see cref="UserAuthenticateModel"/> utilisé pour authentifier <see cref="User">Utilisateur</see></param>
+    /// <param name="model">Le <see cref="UserAuthenticateModel"/> utilisé pour authentifier <see cref="User">Utilisateur</see>.</param>
     /// <returns>L'<see cref="User">Utilisateur</see> si l'authentification est ok.</returns>
     [AllowAnonymous]
     [HttpPost("auth")]
     public IActionResult Authenticate([FromBody]UserAuthenticateModel model)
     {
-      _logger.LogDebug(string.Format(CultureInfo.InvariantCulture, _localizer["LogLoginTry"].Value, model?.Username));
-      var user = _userService.Authenticate(model);
+      this.logger.LogDebug(string.Format(CultureInfo.InvariantCulture, this.localizer["LogLoginTry"].Value, model?.Username));
+      var user = this.userService.Authenticate(model);
 
       if (user == null)
       {
-        _logger.LogWarning(string.Format(CultureInfo.InvariantCulture, _localizer["LogLoginFailed"].Value, model?.Username));
-        return BadRequest(new { message = _localizer["LoginFailed"].Value });
+        this.logger.LogWarning(string.Format(CultureInfo.InvariantCulture, this.localizer["LogLoginFailed"].Value, model?.Username));
+        return this.BadRequest(new { message = this.localizer["LoginFailed"].Value });
       }
       else
       {
-        _logger.LogInformation(string.Format(CultureInfo.InvariantCulture, _localizer["LogLoginSuccess"].Value, model?.Username));
-        return Ok(user);
+        this.logger.LogInformation(string.Format(CultureInfo.InvariantCulture, this.localizer["LogLoginSuccess"].Value, model?.Username));
+        return this.Ok(user);
       }
     }
 
@@ -112,7 +112,7 @@
     [HttpPost("register")]
     public IActionResult Register([FromBody]User model)
     {
-      _logger.LogDebug(string.Format(CultureInfo.InvariantCulture, _localizer["LogRegisterTry"].Value));
+      this.logger.LogDebug(string.Format(CultureInfo.InvariantCulture, this.localizer["LogRegisterTry"].Value));
 
       if (model == null)
       {
@@ -122,60 +122,66 @@
       User user;
       try
       {
-        user = _userService.Register(model);
+        user = this.userService.Register(model);
       }
       catch (Exception ex)
       {
         if (ex.GetType() == typeof(ArgumentException))
         {
-          _logger.LogWarning(string.Format(CultureInfo.InvariantCulture, ex.Message));
-          return Conflict(new { message = ex.Message });
+          this.logger.LogWarning(string.Format(CultureInfo.InvariantCulture, ex.Message));
+          return this.Conflict(new { message = ex.Message });
         }
-        throw;
+
+        throw ex;
       }
 
       if (user == null)
       {
-        _logger.LogWarning(string.Format(CultureInfo.InvariantCulture, _localizer["LogRegisterFailed"].Value, model?.Username));
-        return BadRequest(new { message = _localizer["RegisterFailed"].Value });
+        this.logger.LogWarning(string.Format(CultureInfo.InvariantCulture, this.localizer["LogRegisterFailed"].Value, model?.Username));
+        return this.BadRequest(new { message = this.localizer["RegisterFailed"].Value });
       }
       else
       {
-        _logger.LogInformation(string.Format(CultureInfo.InvariantCulture, _localizer["LogRegisterSuccess"].Value, model?.Username));
+        this.logger.LogInformation(string.Format(CultureInfo.InvariantCulture, this.localizer["LogRegisterSuccess"].Value, model?.Username));
 
-        // Envoie de l'email d'activation.
-        _emailService.SendTemplate(new EmailAddress() { Address = model.Email, Name = model.Username }, "Register", new
+        // Envoi de l'email d'activation.
+        this.emailService.SendTemplate(new EmailAddress() { Address = model.Email, Name = model.Username }, "Register", new
         {
           username = user.Username,
-          activateaccountlink = $"{new Uri(new Uri(_appSettings.Environment.FrontUrl), $"#/activate/{user.ActivationToken}")}",
-          sitename = _appSettings.Environment.Name,
-          siteurl = _appSettings.Environment.FrontUrl,
-          unsubscribeurl = new Uri(new Uri(_appSettings.Environment.FrontUrl), "/unsubscribe").ToString(),
+          activateaccountlink = $"{new Uri(new Uri(this.appSettings.Environment.FrontUrl), $"#/activate/{user.ActivationToken}")}",
+          sitename = this.appSettings.Environment.Name,
+          siteurl = this.appSettings.Environment.FrontUrl,
+          unsubscribeurl = new Uri(new Uri(this.appSettings.Environment.FrontUrl), "/unsubscribe").ToString(),
         });
-        return Ok(user);
+        return this.Ok(user);
       }
     }
 
+    /// <summary>
+    /// Active un utilisateur.
+    /// </summary>
+    /// <param name="token">Le token d'activation de l'utilisateur.</param>
+    /// <returns>Le résultat de l'opération.</returns>
     [AllowAnonymous]
     [HttpGet("activate/{token}")]
     public IActionResult Activate(string token)
     {
-      _logger.LogDebug(string.Format(CultureInfo.InvariantCulture, _localizer["LogActivateTry"].Value));
+      this.logger.LogDebug(string.Format(CultureInfo.InvariantCulture, this.localizer["LogActivateTry"].Value));
 
       if (string.IsNullOrEmpty(token))
       {
         throw new ArgumentNullException(nameof(token));
       }
 
-      User user = _userService.Activate(token);
+      User user = this.userService.Activate(token);
 
       if (user == null)
       {
-        _logger.LogDebug(string.Format(CultureInfo.InvariantCulture, _localizer["LogActivateNotFound"].Value, token));
-        return NotFound(new { message = string.Format(CultureInfo.InvariantCulture, _localizer["LogActivateNotFound"].Value, token) });
+        this.logger.LogDebug(string.Format(CultureInfo.InvariantCulture, this.localizer["LogActivateNotFound"].Value, token));
+        return this.NotFound(new { message = string.Format(CultureInfo.InvariantCulture, this.localizer["LogActivateNotFound"].Value, token) });
       }
 
-      return Ok(new { message = string.Format(CultureInfo.InvariantCulture, _localizer["LogActivateSuccess"].Value, token) });
+      return this.Ok(new { message = string.Format(CultureInfo.InvariantCulture, this.localizer["LogActivateSuccess"].Value, token) });
     }
 
     /// <summary>
@@ -187,7 +193,7 @@
     [HttpPost("forgotpassword")]
     public IActionResult ForgotPassword([FromBody]UserPasswordLostModel model)
     {
-      _logger.LogDebug(string.Format(CultureInfo.InvariantCulture, _localizer["LogPasswordLostTokenTry"].Value));
+      this.logger.LogDebug(string.Format(CultureInfo.InvariantCulture, this.localizer["LogPasswordLostTokenTry"].Value));
 
       if (model == null)
       {
@@ -197,17 +203,17 @@
       User user = null;
       if (!string.IsNullOrEmpty(model.Email))
       {
-        user = _userService.GetByEmail(model.Email);
+        user = this.userService.GetByEmail(model.Email);
       }
       else if (!string.IsNullOrEmpty(model.Username))
       {
-        user = _userService.GetByUsername(model.Username);
+        user = this.userService.GetByUsername(model.Username);
       }
 
       if (user == null)
       {
-        _logger.LogDebug(string.Format(CultureInfo.InvariantCulture, _localizer["LogPasswordLostTokenUserNotFound"].Value, new { method = !string.IsNullOrEmpty(model.Email) ? "email" : "username", value = model.Email ?? model.Username }));
-        return NotFound(new { message = string.Format(CultureInfo.InvariantCulture, _localizer["LogPasswordLostTokenUserNotFound"].Value) });
+        this.logger.LogDebug(string.Format(CultureInfo.InvariantCulture, this.localizer["LogPasswordLostTokenUserNotFound"].Value, new { method = !string.IsNullOrEmpty(model.Email) ? "email" : "username", value = model.Email ?? model.Username }));
+        return this.NotFound(new { message = string.Format(CultureInfo.InvariantCulture, this.localizer["LogPasswordLostTokenUserNotFound"].Value) });
       }
 
       UserPasswordResetToken userPasswordResetToken;
@@ -218,31 +224,31 @@
         userPasswordResetToken = new UserPasswordResetToken()
         {
           Token = token,
-          ValidUntil = DateTime.UtcNow.AddMinutes(_appSettings.Security.ResetPasswordTokenDurationInMinutes),
+          ValidUntil = DateTime.UtcNow.AddMinutes(this.appSettings.Security.ResetPasswordTokenDurationInMinutes),
           Created = DateTime.UtcNow,
-          CreatedBy = new UserReference() { Id = user.Id, Username = user.Username }
+          CreatedBy = new UserReference() { Id = user.Id, Username = user.Username },
         };
-        userPasswordResetToken = _userPasswordResetTokenService.Create(userPasswordResetToken);
+        userPasswordResetToken = this.userPasswordResetTokenService.Create(userPasswordResetToken);
 
         // Envoie de l'email, avec le token en clair.
-        _emailService.SendTemplate(new EmailAddress() { Address = user.Email, Name = user.Username }, "PasswordLost", new
+        this.emailService.SendTemplate(new EmailAddress() { Address = user.Email, Name = user.Username }, "PasswordLost", new
         {
           username = user.Username,
-          resetpasswordlink = $"{new Uri(new Uri(_appSettings.Environment.FrontUrl), $"#/resetpassword/{token}")}",
-          sitename = _appSettings.Environment.Name,
-          siteurl = _appSettings.Environment.FrontUrl,
-          unsubscribeurl = new Uri(new Uri(_appSettings.Environment.FrontUrl), "/unsubscribe").ToString(),
+          resetpasswordlink = $"{new Uri(new Uri(this.appSettings.Environment.FrontUrl), $"#/resetpassword/{token}")}",
+          sitename = this.appSettings.Environment.Name,
+          siteurl = this.appSettings.Environment.FrontUrl,
+          unsubscribeurl = new Uri(new Uri(this.appSettings.Environment.FrontUrl), "/unsubscribe").ToString(),
         });
       }
       catch (Exception ex)
       {
         // TODO: Gérer les exceptions, avec message localisé
-        _logger.LogError(string.Format(CultureInfo.InvariantCulture, _localizer["LogPasswordLostTokenFailed"].Value));
+        this.logger.LogError(string.Format(CultureInfo.InvariantCulture, this.localizer["LogPasswordLostTokenFailed"].Value));
         throw ex;
       }
 
-      _logger.LogDebug(string.Format(CultureInfo.InvariantCulture, _localizer["LogPasswordLostTokenSuccess"].Value, new { value = model.Email ?? model.Username }));
-      return Ok();
+      this.logger.LogDebug(string.Format(CultureInfo.InvariantCulture, this.localizer["LogPasswordLostTokenSuccess"].Value, new { value = model.Email ?? model.Username }));
+      return this.Ok();
     }
 
     /// <summary>
@@ -254,7 +260,7 @@
     [HttpPost("resetpassword")]
     public IActionResult ResetPassword(UserResetPasswordModel model)
     {
-      _logger.LogDebug(string.Format(CultureInfo.InvariantCulture, _localizer["LogResetPasswordTry"].Value));
+      this.logger.LogDebug(string.Format(CultureInfo.InvariantCulture, this.localizer["LogResetPasswordTry"].Value));
 
       if (model == null)
       {
@@ -271,22 +277,20 @@
         if (result.Email == model.Email && result.Username == model.Username)
         {
           // Relié au bon utilisateur.
-          user = _userService.GetByEmail(result.Email);
-          _userService.UpdatePassword(user.Id, model.Password);
+          user = this.userService.GetByEmail(result.Email);
+          this.userService.UpdatePassword(user.Id, model.Password);
 
-          return Ok();
+          return this.Ok();
         }
         else
         {
-          return Conflict(new { message = _localizer["LogResetPasswordUserConflict"].Value });
+          return this.Conflict(new { message = this.localizer["LogResetPasswordUserConflict"].Value });
         }
       }
       else
       {
         return existsResult;
       }
-
-      return Ok();
     }
 
     /// <summary>
@@ -298,38 +302,38 @@
     [HttpGet("resetpassword/{token}")]
     public IActionResult ResetPasswordExists(string token)
     {
-      _logger.LogDebug(string.Format(CultureInfo.InvariantCulture, _localizer["LogResetPasswordExistsTry"].Value));
+      this.logger.LogDebug(string.Format(CultureInfo.InvariantCulture, this.localizer["LogResetPasswordExistsTry"].Value));
 
       if (string.IsNullOrEmpty(token))
       {
         throw new ArgumentNullException(nameof(token));
       }
 
-      UserPasswordResetToken userPasswordResetToken = _userPasswordResetTokenService.GetByToken(token);
+      UserPasswordResetToken userPasswordResetToken = this.userPasswordResetTokenService.GetByToken(token);
       User user;
 
       if (userPasswordResetToken == null)
       {
-        _logger.LogDebug(string.Format(CultureInfo.InvariantCulture, _localizer["LogResetPasswordExistsNotFound"].Value, token));
-        return NotFound(new { message = string.Format(CultureInfo.InvariantCulture, _localizer["LogResetPasswordExistsNotFound"].Value, token) });
+        this.logger.LogDebug(string.Format(CultureInfo.InvariantCulture, this.localizer["LogResetPasswordExistsNotFound"].Value, token));
+        return this.NotFound(new { message = string.Format(CultureInfo.InvariantCulture, this.localizer["LogResetPasswordExistsNotFound"].Value, token) });
       }
 
-      if (_userPasswordResetTokenService.IsValid(userPasswordResetToken))
+      if (this.userPasswordResetTokenService.IsValid(userPasswordResetToken))
       {
-        user = _userService.Get(userPasswordResetToken.CreatedBy.Id);
+        user = this.userService.Get(userPasswordResetToken.CreatedBy.Id);
         if (user != null)
         {
-          return Ok(new UserPasswordLostResponseModel() { Username = user.Username, Email = user.Email });
+          return this.Ok(new UserPasswordLostResponseModel() { Username = user.Username, Email = user.Email });
         }
         else
         {
-          _logger.LogError(string.Format(CultureInfo.InvariantCulture, _localizer["LogResetPasswordExistsUserNotFound"].Value));
-          return NotFound(new { message = string.Format(CultureInfo.InvariantCulture, _localizer["LogResetPasswordExistsUserNotFound"].Value) });
+          this.logger.LogError(string.Format(CultureInfo.InvariantCulture, this.localizer["LogResetPasswordExistsUserNotFound"].Value));
+          return this.NotFound(new { message = string.Format(CultureInfo.InvariantCulture, this.localizer["LogResetPasswordExistsUserNotFound"].Value) });
         }
       }
       else
       {
-        return StatusCode(498, new { message = string.Format(CultureInfo.InvariantCulture, _localizer["LogResetPasswordExistsNotValid"].Value) });
+        return this.StatusCode(498, new { message = string.Format(CultureInfo.InvariantCulture, this.localizer["LogResetPasswordExistsNotValid"].Value) });
       }
     }
 
@@ -340,8 +344,8 @@
     [HttpGet]
     public IActionResult Get()
     {
-      User user = _userService.GetByUsername("test");
-      return Ok(user);
+      User user = this.userService.GetByUsername("test");
+      return this.Ok(user);
     }
   }
 }

@@ -1,22 +1,17 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace JWTNetCoreVue.Security
+﻿namespace JWTNetCoreVue.Security
 {
+  using System;
+  using Microsoft.AspNetCore.Builder;
+  using Microsoft.AspNetCore.Hosting;
+  using Microsoft.AspNetCore.Http;
+  using Microsoft.Extensions.DependencyInjection;
+  using Microsoft.Extensions.Hosting;
+
   /// <summary>
   /// Espace de configuration pour Cors.
   /// </summary>
   public static class CorsConfiguration
   {
-    #region CorsPolicies
-
     /// <summary>
     /// Policy Cors pour tout autoriser.
     /// </summary>
@@ -31,8 +26,6 @@ namespace JWTNetCoreVue.Security
     /// Autre Policy Cors pour monter l'application de plusieures policy.
     /// </summary>
     public static readonly string CorsPolicyOther = "CorsOther";
-
-    #endregion CorsPolicies
 
     /// <summary>
     /// Liste des policy Cors activées pour le mode production.
@@ -52,7 +45,8 @@ namespace JWTNetCoreVue.Security
     {
       services.AddCors(options =>
       {
-        options.AddPolicy(CorsPolicyAllowAll,
+        options.AddPolicy(
+          CorsPolicyAllowAll,
           builder =>
           {
             builder.AllowAnyOrigin()
@@ -63,7 +57,8 @@ namespace JWTNetCoreVue.Security
 
       services.AddCors(options =>
       {
-        options.AddPolicy(CorsPolicyFrontend,
+        options.AddPolicy(
+          CorsPolicyFrontend,
           builder =>
           {
             builder.WithOrigins("http://*.ngordat.net", "https://*.ngordat.net")
@@ -76,7 +71,8 @@ namespace JWTNetCoreVue.Security
 
       services.AddCors(options =>
       {
-        options.AddPolicy(CorsPolicyOther,
+        options.AddPolicy(
+          CorsPolicyOther,
           builder =>
           {
             builder.WithOrigins("www.other-url.com")

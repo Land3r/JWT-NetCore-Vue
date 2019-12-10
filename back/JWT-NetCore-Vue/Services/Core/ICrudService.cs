@@ -1,16 +1,17 @@
 ﻿namespace JWTNetCoreVue.Services.Core
 {
-  using JWTNetCoreVue.Entities.Db;
-  using MongoDB.Driver;
   using System;
   using System.Collections.Generic;
+  using JWTNetCoreVue.Entities.Db;
+  using MongoDB.Driver;
 
   /// <summary>
   /// Interface <see cref="ICrudService{TEntity}"/>.
   /// Interface permettant d'accéder aux fonctionnalitées CRUD du service.
   /// </summary>
   /// <typeparam name="TEntity">LE type d'entitée manipulée par le service.</typeparam>
-  public interface ICrudService<TEntity> where TEntity : IDbEntity
+  public interface ICrudService<TEntity>
+    where TEntity : IDbEntity
   {
     /// <summary>
     /// Obtient la collection des entitées en base.
@@ -41,6 +42,7 @@
     /// Mets à jour une entitée dans la collection.
     /// </summary>
     /// <param name="elmIn">Les données de l'entitée mise à jour.</param>
+    /// <returns>Le résultat de l'opération.</returns>
     public ReplaceOneResult Update(TEntity elmIn);
 
     /// <summary>
@@ -48,6 +50,7 @@
     /// </summary>
     /// <param name="id">L'id de l'entitée à mettre à jour.</param>
     /// <param name="elmIn">Les données de l'entitée mise à jour.</param>
+    /// <returns>Le résultat de l'opération.</returns>
     public ReplaceOneResult Update(Guid id, TEntity elmIn);
 
     /// <summary>
@@ -60,7 +63,7 @@
     /// <summary>
     /// Supprime une entitée de la collection, par son Id.
     /// </summary>
-    /// <param name="elmIn">L'élement à supprimer.</param>
+    /// <param name="id">L'élement à supprimer.</param>
     /// <returns>Le résultat de l'opération.</returns>
     public DeleteResult Remove(Guid id);
   }

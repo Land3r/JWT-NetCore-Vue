@@ -1,5 +1,7 @@
 ﻿namespace JWTNetCoreVue.Services
 {
+  using System;
+  using System.Reflection;
   using JWTNetCoreVue.Entities.Emails;
   using JWTNetCoreVue.Services.Core;
   using JWTNetCoreVue.Settings;
@@ -8,19 +10,17 @@
   using Microsoft.Extensions.Logging;
   using Microsoft.Extensions.Options;
   using MongoDB.Driver;
-    using System;
-    using System.Reflection;
 
-    /// <summary>
-    /// Classe <see cref="EmailTemplateService"/>.
-    /// Service CRUD pour les <see cref="EmailTemplate"/>.
-    /// </summary>
-    public class EmailTemplateService : AMongoEntityLocalizedService<EmailTemplate, EmailTemplateService>, IEmailTemplateService
+  /// <summary>
+  /// Classe <see cref="EmailTemplateService"/>.
+  /// Service CRUD pour les <see cref="EmailTemplate"/>.
+  /// </summary>
+  public class EmailTemplateService : AMongoEntityLocalizedService<EmailTemplate, EmailTemplateService>, IEmailTemplateService
   {
     /// <summary>
     /// Le nom de la collection mongo.
     /// </summary>
-    private const string _collectionName = "EmailTemplates";
+    private const string CollectionName = "EmailTemplates";
 
     /// <summary>
     /// Initialise une nouvelle instance de la classe <see cref="EmailTemplateService"/>.
@@ -28,9 +28,11 @@
     /// <param name="localizer">Les ressources de localisation.</param>
     /// <param name="appSettings">La configuration de l'application.</param>
     /// <param name="logger">Le logger utilisé par le service.</param>
-    public EmailTemplateService([FromServices]IStringLocalizer<EmailTemplateService> localizer,
+    public EmailTemplateService(
+      [FromServices]IStringLocalizer<EmailTemplateService> localizer,
       IOptions<AppSettings> appSettings,
-      [FromServices] ILogger<EmailTemplateService> logger) : base(appSettings, _collectionName, logger, localizer)
+      [FromServices] ILogger<EmailTemplateService> logger)
+      : base(appSettings, CollectionName, logger, localizer)
     {
     }
 
@@ -41,7 +43,7 @@
     /// <returns>Le <see cref="EmailTemplate"/> si trouvé.</returns>
     public EmailTemplate GetByName(string templateName)
     {
-      return Entities.Find(template => template.Name == templateName).FirstOrDefault();
+      return this.Entities.Find(template => template.Name == templateName).FirstOrDefault();
     }
   }
 }

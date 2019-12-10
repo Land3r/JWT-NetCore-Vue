@@ -1,8 +1,8 @@
 ﻿namespace JWTNetCoreVue.Services.Core
 {
+  using System;
   using Microsoft.AspNetCore.Mvc;
   using Microsoft.Extensions.Logging;
-  using System;
 
   /// <summary>
   /// Classe abstraite <see cref="ALoggedService{TEntity}"/>.
@@ -12,13 +12,9 @@
   public abstract class ALoggedService<TService> : ILoggedService<TService>
   {
     /// <summary>
-    /// Le Logger utilisé par le controller.
-    /// </summary>
-    public ILogger<TService> Logger { get; private set; }
-
-    /// <summary>
     /// Initialise une nouvelle instance de <see cref="ALoggedService{T}"/>.
     /// </summary>
+    /// <param name="logger">Le logger utilisé.</param>
     /// <param name="T">Le type du logger à utiliser.</param>
     public ALoggedService([FromServices] ILogger<TService> logger)
     {
@@ -28,8 +24,13 @@
       }
       else
       {
-        Logger = logger;
+        this.Logger = logger;
       }
     }
+
+    /// <summary>
+    /// Le Logger utilisé par le controller.
+    /// </summary>
+    public ILogger<TService> Logger { get; private set; }
   }
 }

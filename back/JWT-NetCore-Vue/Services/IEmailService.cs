@@ -9,7 +9,7 @@
   public interface IEmailService
   {
     /// <summary>
-    /// Envoie un email
+    /// Envoie un email.
     /// </summary>
     /// <param name="address">L'<see cref="EmailAddress"/> de la personne a contacter.</param>
     /// <param name="subject">Le sujet de l'email.</param>

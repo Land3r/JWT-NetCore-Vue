@@ -1,8 +1,8 @@
 ﻿namespace JWTNetCoreVue.Extensions
 {
-  using JWTNetCoreVue.Entities.Emails;
   using System;
   using System.Reflection;
+  using JWTNetCoreVue.Entities.Emails;
 
   /// <summary>
   /// Collection de méthodes d'extensions pour la gestion des <see cref="EmailTemplate">templates emails</see>.

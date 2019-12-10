@@ -1,14 +1,14 @@
 ﻿namespace JWTNetCoreVue.Services.Core
 {
+  using System;
+  using System.Collections.Generic;
+  using System.Linq;
   using JWTNetCoreVue.Entities.Db;
   using JWTNetCoreVue.Settings;
   using Microsoft.AspNetCore.Mvc;
   using Microsoft.Extensions.Logging;
   using Microsoft.Extensions.Options;
   using MongoDB.Driver;
-  using System;
-  using System.Collections.Generic;
-  using System.Linq;
 
   /// <summary>
   /// Classe abstraite AMongoEntityService.
@@ -16,19 +16,20 @@
   /// </summary>
   /// <typeparam name="TEntity">Le type de l'entitée.</typeparam>
   /// <typeparam name="TService">Le type du service.</typeparam>
-  public abstract class AMongoEntityService<TEntity, TService> : ALoggedService<TService>, ICrudService<TEntity> where TEntity : IDbEntity
+  public abstract class AMongoEntityService<TEntity, TService> : ALoggedService<TService>, ICrudService<TEntity>
+    where TEntity : IDbEntity
   {
     /// <summary>
-    /// Obtient la collection des entitées en base.
-    /// </summary>
-    public IMongoCollection<TEntity> Entities { get; private set; }
-
-    /// <summary>
-    /// Instancie une nouvelle instance de la classe <see cref="AMongoEntityService{T}"/>
+    /// Instancie une nouvelle instance de la classe <see cref="AMongoEntityService{T}"/>.
     /// </summary>
     /// <param name="appSettings">La configuration de l'application.</param>
     /// <param name="collectionName">Le nom de la collection en base.</param>
-    public AMongoEntityService(IOptions<AppSettings> appSettings, string collectionName, [FromServices] ILogger<TService> logger) : base(logger)
+    /// <param name="logger">Le logger à utiliser.</param>
+    public AMongoEntityService(
+      IOptions<AppSettings> appSettings,
+      string collectionName,
+      [FromServices] ILogger<TService> logger)
+      : base(logger)
     {
       if (appSettings == null)
       {
@@ -42,8 +43,13 @@
       var client = new MongoClient(appSettings?.Value.MongoDb.ConnectionString);
       var db = client.GetDatabase(appSettings?.Value.MongoDb.DatabaseName);
 
-      Entities = db.GetCollection<TEntity>(collectionName);
+      this.Entities = db.GetCollection<TEntity>(collectionName);
     }
+
+    /// <summary>
+    /// Obtient la collection des entitées en base.
+    /// </summary>
+    public IMongoCollection<TEntity> Entities { get; private set; }
 
     /// <summary>
     /// Obtient toutes les entitées de la collection.
@@ -51,7 +57,7 @@
     /// <returns>La liste de toutes les entitées.</returns>
     public virtual IEnumerable<TEntity> Get()
     {
-      return Entities.Find(elm => true).ToEnumerable();
+      return this.Entities.Find(elm => true).ToEnumerable();
     }
 
     /// <summary>
@@ -61,7 +67,7 @@
     /// <returns>L'entitée ou null si aucune n'a été trouvée.</returns>
     public virtual TEntity Get(Guid id)
     {
-      return Entities.Find<TEntity>(elm => elm.Id == id).FirstOrDefault();
+      return this.Entities.Find<TEntity>(elm => elm.Id == id).FirstOrDefault();
     }
 
     /// <summary>
@@ -78,18 +84,21 @@
         {
           (elm as IDbTrackedEntity).Created = DateTime.UtcNow;
         }
+
         if (elmTracked.Updated == DateTime.MinValue)
         {
           (elm as IDbTrackedEntity).Updated = (elm as IDbTrackedEntity).Created;
         }
+
         if (elmTracked.CreatedBy == null)
         {
           (elm as IDbTrackedEntity).CreatedBy = new UserReference()
           {
-            Id = new Guid(),
-            Username = "System"
+            Id = Guid.NewGuid(),
+            Username = "System",
           };
         }
+
         if (elmTracked.UpdatedBy == null)
         {
           (elm as IDbTrackedEntity).UpdatedBy = (elm as IDbTrackedEntity).CreatedBy;
@@ -97,7 +106,7 @@
       }
 
       // Id field is automatically populated.
-      Entities.InsertOne(elm);
+      this.Entities.InsertOne(elm);
 
       return elm;
     }
@@ -106,6 +115,7 @@
     /// Mets à jour une entitée dans la collection.
     /// </summary>
     /// <param name="elmIn">Les données de l'entitée mise à jour.</param>
+    /// <returns>Le résultat de l'opération.</returns>
     public virtual ReplaceOneResult Update(TEntity elmIn)
     {
       if (elmIn is IDbTrackedEntity)
@@ -115,11 +125,11 @@
         (elmIn as IDbTrackedEntity).UpdatedBy = new UserReference()
         {
           Id = Guid.NewGuid(),
-          Username = "System" //TODO.
+          Username = "System", // TODO.
         };
       }
 
-      return Entities.ReplaceOne(book => book.Id == elmIn.Id, elmIn);
+      return this.Entities.ReplaceOne(book => book.Id == elmIn.Id, elmIn);
     }
 
     /// <summary>
@@ -127,6 +137,7 @@
     /// </summary>
     /// <param name="id">L'id de l'entitée à mettre à jour.</param>
     /// <param name="elmIn">Les données de l'entitée mise à jour.</param>
+    /// <returns>Le résultat de l'opération.</returns>
     public virtual ReplaceOneResult Update(Guid id, TEntity elmIn)
     {
       if (elmIn is IDbTrackedEntity)
@@ -136,11 +147,11 @@
         (elmIn as IDbTrackedEntity).UpdatedBy = new UserReference()
         {
           Id = Guid.NewGuid(),
-          Username = "System" //TODO.
+          Username = "System", // TODO.
         };
       }
 
-      return Entities.ReplaceOne(book => book.Id == id, elmIn);
+      return this.Entities.ReplaceOne(book => book.Id == id, elmIn);
     }
 
     /// <summary>
@@ -150,17 +161,17 @@
     /// <returns>Le résultat de l'opération.</returns>
     public virtual DeleteResult Remove(TEntity elmIn)
     {
-      return Entities.DeleteOne(book => book.Id == elmIn.Id);
+      return this.Entities.DeleteOne(book => book.Id == elmIn.Id);
     }
 
     /// <summary>
     /// Supprime une entitée de la collection, par son Id.
     /// </summary>
-    /// <param name="elmIn">L'élement à supprimer.</param>
+    /// <param name="id">L'id de l'élément à supprimer.</param>
     /// <returns>Le résultat de l'opération.</returns>
     public virtual DeleteResult Remove(Guid id)
     {
-      return Entities.DeleteOne(book => book.Id == id);
+      return this.Entities.DeleteOne(book => book.Id == id);
     }
   }
 }

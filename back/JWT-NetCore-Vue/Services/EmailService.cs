@@ -2,14 +2,14 @@ namespace JWTNetCoreVue.Services
 {
   using System;
   using JWTNetCoreVue.Entities.Emails;
+  using JWTNetCoreVue.Extensions;
   using JWTNetCoreVue.Services.Core;
   using JWTNetCoreVue.Settings;
+  using MailKit.Net.Smtp;
   using Microsoft.AspNetCore.Mvc;
   using Microsoft.Extensions.Localization;
-  using Microsoft.Extensions.Options;
   using Microsoft.Extensions.Logging;
-  using JWTNetCoreVue.Extensions;
-  using MailKit.Net.Smtp;
+  using Microsoft.Extensions.Options;
   using MimeKit;
   using MimeKit.Text;
 
@@ -22,36 +22,31 @@ namespace JWTNetCoreVue.Services
     /// <summary>
     /// La configuration de l'application.
     /// </summary>
-    private AppSettings _appSettings;
+    private readonly AppSettings appSettings;
 
     /// <summary>
     /// Le service des templates emails.
     /// </summary>
-    public IEmailTemplateService _emailTemplateService;
+    private readonly IEmailTemplateService emailTemplateService;
 
     /// <summary>
     /// L'instance du client smtp.
     /// </summary>
-    private SmtpClient _smtpClient = new SmtpClient();
-
-    /// <summary>
-    /// Obtient si le service est connecté au smtp.
-    /// </summary>
-    private bool IsConnected
-    {
-      get { return _smtpClient.IsConnected; }
-    }
+    private readonly SmtpClient smtpClient = new SmtpClient();
 
     /// <summary>
     /// Initialise une nouvelle instance de <see cref="EmailService"/>.
     /// </summary>
     /// <param name="localizer">Les ressources localisées.</param>
-    /// <param name="appSettings">La configuration de l'application</param>
+    /// <param name="appSettings">La configuration de l'application.</param>
+    /// <param name="emailTemplateService">Le service de template emails.</param>
     /// <param name="logger">Le logger utilisé.</param>
-    public EmailService([FromServices]IStringLocalizer<EmailService> localizer,
+    public EmailService(
+      [FromServices]IStringLocalizer<EmailService> localizer,
       IOptions<AppSettings> appSettings,
       IEmailTemplateService emailTemplateService,
-      [FromServices] ILogger<EmailService> logger) : base(logger, localizer)
+      [FromServices] ILogger<EmailService> logger)
+      : base(logger, localizer)
     {
       if (appSettings == null)
       {
@@ -59,7 +54,7 @@ namespace JWTNetCoreVue.Services
       }
       else
       {
-        _appSettings = appSettings.Value;
+        this.appSettings = appSettings.Value;
       }
 
       if (emailTemplateService == null)
@@ -68,10 +63,32 @@ namespace JWTNetCoreVue.Services
       }
       else
       {
-        _emailTemplateService = emailTemplateService;
+        this.emailTemplateService = emailTemplateService;
       }
     }
 
+    /// <summary>
+    /// Destructeur de l'instance de la classe.
+    /// </summary>
+    ~EmailService()
+    {
+      this.Dispose(false);
+    }
+
+    /// <summary>
+    /// Obtient si le service est connecté au smtp.
+    /// </summary>
+    private bool IsConnected
+    {
+      get { return this.smtpClient.IsConnected; }
+    }
+
+    /// <summary>
+    /// Envoie un email, basé sur un template HTML.
+    /// </summary>
+    /// <param name="address">L'<see cref="EmailAddress"/> de la personne a contacter.</param>
+    /// <param name="templateName">Le nom du template email.</param>
+    /// <param name="values">Les valeurs à injecter dans le template.</param>
     public void SendTemplate(EmailAddress address, string templateName, dynamic values)
     {
       if (string.IsNullOrEmpty(templateName))
@@ -79,7 +96,7 @@ namespace JWTNetCoreVue.Services
         throw new ArgumentNullException(nameof(templateName));
       }
 
-      EmailTemplate emailTemplate = _emailTemplateService.GetByName(templateName);
+      EmailTemplate emailTemplate = this.emailTemplateService.GetByName(templateName);
       if (emailTemplate == null)
       {
         throw new ApplicationException($"EmailTemplate nammed {templateName} not found.");
@@ -89,26 +106,6 @@ namespace JWTNetCoreVue.Services
       Tuple<string, string> email = EmailTemplateExtension.Compile(emailTemplate, values);
 
       this.Send(address, email.Item1, email.Item2);
-    }
-
-    /// <summary>
-    /// Desctructeur de l'instance de la classe.
-    /// </summary>
-    ~EmailService()
-    {
-      Dispose(false);
-    }
-
-    /// <summary>
-    /// Se connecter au serveur smtp.
-    /// </summary>
-    private void TryConnect()
-    {
-      if (!IsConnected)
-      {
-        _smtpClient.Connect(_appSettings.Email.Smtp.Host, _appSettings.Email.Smtp.Port, true);
-        _smtpClient.Authenticate(_appSettings.Email.Smtp.Username, _appSettings.Email.Smtp.Password);
-      }
     }
 
     /// <summary>
@@ -135,7 +132,7 @@ namespace JWTNetCoreVue.Services
       MimeMessage message = new MimeMessage();
 
       // From
-      message.From.Add(new MailboxAddress(_appSettings.Email.From.Name, _appSettings.Email.From.Address));
+      message.From.Add(new MailboxAddress(this.appSettings.Email.From.Name, this.appSettings.Email.From.Address));
 
       // To
       // TODO: Faire une vérif de la validitée des emails avant.
@@ -154,14 +151,15 @@ namespace JWTNetCoreVue.Services
       // Body
       message.Body = new TextPart(TextFormat.Html)
       {
-        Text = body
+        Text = body,
       };
 
-      if (!IsConnected)
+      if (!this.IsConnected)
       {
-        TryConnect();
+        this.TryConnect();
       }
-      _smtpClient.Send(message);
+
+      this.smtpClient.Send(message);
     }
 
     /// <summary>
@@ -175,76 +173,71 @@ namespace JWTNetCoreVue.Services
     {
       try
       {
-        Send(address, subject, body);
+        this.Send(address, subject, body);
         return true;
       }
       catch (Exception ex)
       {
-        Logger.LogCritical(ex, "Error while sending email.");
+        // TODO
+        this.Logger.LogCritical(ex, "Error while sending email.");
         return false;
       }
     }
 
+    /// <summary>
+    /// Essaie d'envoyer un email, basé sur un template HTML.
+    /// </summary>
+    /// <param name="address">L'<see cref="EmailAddress"/> de la personne a contacter.</param>
+    /// <param name="templateName">Le nom du template email.</param>
+    /// <param name="values">Les valeurs à injecter dans le template.</param>
+    /// <returns>Si l'envoi d'email a reussi ou non.</returns>
     public bool TrySendTemplate(EmailAddress address, string templateName, dynamic values)
     {
       try
       {
-        SendTemplate(address, templateName, values);
+        this.SendTemplate(address, templateName, values);
         return true;
       }
       catch (Exception ex)
       {
-        Logger.LogCritical(ex, "Error while sending email.");
+        this.Logger.LogCritical(ex, "Error while sending email.");
         return false;
       }
     }
 
-    #region Implementation de l'interface IDisposable
-
+    /// <summary>
+    /// Dispose les éléments en mémoire de cette instance de <see cref="EmailService"/>.
+    /// </summary>
     public void Dispose()
     {
       this.Dispose(true);
       GC.SuppressFinalize(this);
     }
 
+    /// <summary>
+    /// Dispose les éléments en mémoire de cette instance de <see cref="EmailService"/>.
+    /// </summary>
+    /// <param name="disposing">Permet de valider le fait de disposer les ressources.</param>
     protected virtual void Dispose(bool disposing)
     {
-      if (IsConnected)
+      if (this.IsConnected)
       {
-        _smtpClient.Disconnect(true);
+        this.smtpClient.Disconnect(true);
       }
-      _smtpClient.Dispose();
+
+      this.smtpClient.Dispose();
     }
 
-    #endregion Implementation de l'interface IDisposable
-
-    //}
-    //// TODO: Ajouter des méthodes d'ajouts d'email.
-    //public void SendTest()
-    //{
-    //  var fromAddress = new MailAddress();
-    //  var toAddress = new MailAddress();
-    //  const string fromPassword = "";
-    //  const string subject = "Coucou";
-    //  const string body = "<h1>COUCOU</h1><p>Tu veux un peu de crème pour les mains ??</p>";
-
-    //  var smtp = new SmtpClient
-    //  {
-    //    Host = ,
-    //    Port = ,
-    //    EnableSsl = true,
-    //    DeliveryMethod = SmtpDeliveryMethod.Network,
-    //    UseDefaultCredentials = false,
-    //    Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
-    //  };
-    //  using (var message = new MailMessage(fromAddress, toAddress)
-    //  {
-    //    Subject = subject,
-    //    Body = body
-    //  })
-    //  {
-    //    smtp.Send(message);
-    //  }
-    //}
+    /// <summary>
+    /// Se connecter au serveur smtp.
+    /// </summary>
+    private void TryConnect()
+    {
+      if (!this.IsConnected)
+      {
+        this.smtpClient.Connect(this.appSettings.Email.Smtp.Host, this.appSettings.Email.Smtp.Port, true);
+        this.smtpClient.Authenticate(this.appSettings.Email.Smtp.Username, this.appSettings.Email.Smtp.Password);
+      }
+    }
   }
 }

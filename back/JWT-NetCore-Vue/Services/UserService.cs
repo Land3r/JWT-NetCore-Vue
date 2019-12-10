@@ -28,12 +28,12 @@
     /// <summary>
     /// Le nom de la collection mongo.
     /// </summary>
-    private const string _collectionName = "Users";
+    private const string CollectionName = "Users";
 
     /// <summary>
     /// La configuration de l'application.
     /// </summary>
-    private readonly AppSettings _appSettings;
+    private readonly AppSettings appSettings;
 
     /// <summary>
     /// Instancie une nouvelle instance de la classe <see cref="UserService"/>.
@@ -45,7 +45,7 @@
       [FromServices]IStringLocalizer<UserService> localizer,
       IOptions<AppSettings> appSettings,
       [FromServices] ILogger<UserService> logger)
-      : base(appSettings, _collectionName, logger, localizer)
+      : base(appSettings, CollectionName, logger, localizer)
     {
       if (appSettings == null)
       {
@@ -53,7 +53,7 @@
       }
       else
       {
-        _appSettings = appSettings.Value;
+        this.appSettings = appSettings.Value;
       }
     }
 
@@ -69,8 +69,8 @@
         throw new ArgumentNullException(nameof(model));
       }
 
-      string hashedPassword = CryptographicHelper.GetHash(model.Password, _appSettings.Security.HashSalt);
-      User user = Entities.Find(x => x.Username == model.Username && x.Password == hashedPassword).FirstOrDefault();
+      string hashedPassword = CryptographicHelper.GetHash(model.Password, this.appSettings.Security.HashSalt);
+      User user = this.Entities.Find(x => x.Username == model.Username && x.Password == hashedPassword).FirstOrDefault();
 
       if (user == null)
       {
@@ -86,16 +86,16 @@
 
         // Generation du token JWT.
         var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes(_appSettings.Security.JWT.Secret);
+        var key = Encoding.ASCII.GetBytes(this.appSettings.Security.JWT.Secret);
         var tokenDescriptor = new SecurityTokenDescriptor
         {
           Subject = new ClaimsIdentity(new Claim[]
           {
             new Claim(ClaimTypes.Name, user.Id.ToString()),
-            new Claim(ClaimTypes.Email, user.Email.ToString(CultureInfo.InvariantCulture))
+            new Claim(ClaimTypes.Email, user.Email.ToString(CultureInfo.InvariantCulture)),
           }),
-          Expires = DateTime.UtcNow.AddDays(_appSettings.Security.JWT.DurationInDays),
-          SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+          Expires = DateTime.UtcNow.AddDays(this.appSettings.Security.JWT.DurationInDays),
+          SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
         };
         SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
         user.Token = tokenHandler.WriteToken(token);
@@ -116,7 +116,7 @@
         throw new ArgumentNullException(nameof(username));
       }
 
-      return Entities.Find(elm => elm.Username == username).FirstOrDefault()?.WithoutPassword();
+      return this.Entities.Find(elm => elm.Username == username).FirstOrDefault()?.WithoutPassword();
     }
 
     /// <summary>
@@ -131,7 +131,7 @@
         throw new ArgumentNullException(nameof(email));
       }
 
-      return Entities.Find(elm => elm.Email == email).FirstOrDefault()?.WithoutPassword();
+      return this.Entities.Find(elm => elm.Email == email).FirstOrDefault()?.WithoutPassword();
     }
 
     /// <summary>
@@ -171,7 +171,7 @@
     /// <returns>L'utilisateur si correctement activé.</returns>
     public User Activate(string token)
     {
-      User user = Entities.Find(elm => elm.ActivationToken == token).FirstOrDefault();
+      User user = this.Entities.Find(elm => elm.ActivationToken == token).FirstOrDefault();
 
       if (user != null)
       {
@@ -199,7 +199,7 @@
         throw new ArgumentNullException(nameof(elm));
       }
 
-      string hashedPassword = CryptographicHelper.GetHash(elm.Password, _appSettings.Security.HashSalt);
+      string hashedPassword = CryptographicHelper.GetHash(elm.Password, this.appSettings.Security.HashSalt);
       elm.Password = hashedPassword;
 
       return base.Create(elm);
@@ -215,7 +215,7 @@
     {
       User user = this.Get(id);
 
-      string hashedPassword = CryptographicHelper.GetHash(clearPassword, _appSettings.Security.HashSalt);
+      string hashedPassword = CryptographicHelper.GetHash(clearPassword, this.appSettings.Security.HashSalt);
       user.Password = hashedPassword;
 
       return this.Update(user);

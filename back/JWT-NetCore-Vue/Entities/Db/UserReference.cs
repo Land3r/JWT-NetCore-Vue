@@ -1,8 +1,8 @@
 ﻿namespace JWTNetCoreVue.Entities.Db
 {
-    using MongoDB.Bson;
-    using MongoDB.Bson.Serialization.Attributes;
-    using System;
+  using System;
+  using MongoDB.Bson;
+  using MongoDB.Bson.Serialization.Attributes;
 
   /// <summary>
   /// Classe UserReference.

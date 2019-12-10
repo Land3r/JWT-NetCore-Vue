@@ -20,6 +20,7 @@
     /// Obtient ou définit la configuration utilisée pour envoyer des emails.
     /// </summary>
     public EmailSettings Email { get; set; }
+
     /// <summary>
     /// Obtient ou définit la configuration utilisée pour les aspects sécuritaires.
     /// </summary>

@@ -21,7 +21,7 @@
     /// <summary>
     /// Le nom de la collection mongo.
     /// </summary>
-    private const string _collectionName = "UserPasswordResetToken";
+    private const string CollectionName = "UserPasswordResetToken";
 
     /// <summary>
     /// Initialise une nouvelle instance de la classe <see cref="UserPasswordResetTokenService"/>.
@@ -29,9 +29,11 @@
     /// <param name="localizer">Les ressources de localisation.</param>
     /// <param name="appSettings">La configuration de l'application.</param>
     /// <param name="logger">Le logger utilisé par le service.</param>
-    public UserPasswordResetTokenService([FromServices]IStringLocalizer<UserPasswordResetTokenService> localizer,
+    public UserPasswordResetTokenService(
+      [FromServices]IStringLocalizer<UserPasswordResetTokenService> localizer,
       IOptions<AppSettings> appSettings,
-      [FromServices] ILogger<UserPasswordResetTokenService> logger) : base(appSettings, _collectionName, logger, localizer)
+      [FromServices] ILogger<UserPasswordResetTokenService> logger)
+      : base(appSettings, CollectionName, logger, localizer)
     {
     }
 
@@ -53,7 +55,7 @@
       // See https://security.stackexchange.com/questions/86913/should-password-reset-tokens-be-hashed-when-stored-in-a-database for more info.
       string hash = CryptographicHelper.GetHash(token);
 
-      return Entities.Find(elm => elm.Token == hash).FirstOrDefault();
+      return this.Entities.Find(elm => elm.Token == hash).FirstOrDefault();
     }
 
     /// <summary>
