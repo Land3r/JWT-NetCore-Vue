@@ -3,9 +3,13 @@
     <h3>{{$t('indexpage.title')}}</h3>
     <p>{{$t('indexpage.description')}}</p>
     <q-btn color="white" text-color="black" :label="$t('indexpage.btn.testApi')" @click="doTestApi" />
-    <br /> Result:
+    <br />
+    <br />
+    Result:
     <div>
+      <code>
       {{result}}
+      </code>
     </div>
   </q-page>
 </template>
@@ -26,9 +30,9 @@ export default {
     doTestApi: function () {
       const userservice = new UserService()
       userservice.getCurrentUser().then((response) => {
-        this.result = 'Success: ' + JSON.stringify(response)
+        this.result += JSON.stringify(response)
       }).catch((response) => {
-        this.result = 'Failure: ' + JSON.stringify(response)
+        this.result = JSON.stringify(response)
       })
     }
   }
