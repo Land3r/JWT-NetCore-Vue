@@ -176,7 +176,7 @@ namespace JWTNetCoreVue.Services.Emails
         this.Send(address, subject, body);
         return true;
       }
-      catch (Exception ex)
+      catch (SmtpCommandException ex)
       {
         // TODO
         this.Logger.LogCritical(ex, "Error while sending email.");
@@ -198,7 +198,7 @@ namespace JWTNetCoreVue.Services.Emails
         this.SendTemplate(address, templateName, values);
         return true;
       }
-      catch (Exception ex)
+      catch (SmtpCommandException ex)
       {
         this.Logger.LogCritical(ex, "Error while sending email.");
         return false;
