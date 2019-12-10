@@ -124,7 +124,7 @@ export default {
         userservice.connect(response)
         this.isLoading = false
         this.$q.notify({ ...NotifySuccess, message: this.$t('registerpage.success.registersuccess', { username: xss(response.username) }), html: true })
-        this.$router.push({ name: 'IndexPage' })
+        this.$router.push({ name: 'LoginPage' })
       }).catch((response) => {
         this.isLoading = false
         this.$q.notify({ ...NotifyFailure, message: this.$t('registerpage.error.registerfailure') })
