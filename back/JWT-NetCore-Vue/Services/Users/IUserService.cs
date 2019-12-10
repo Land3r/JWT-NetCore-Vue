@@ -1,4 +1,4 @@
-﻿namespace JWTNetCoreVue.Services
+﻿namespace JWTNetCoreVue.Services.Users
 {
   using System;
   using JWTNetCoreVue.Entities.Users;

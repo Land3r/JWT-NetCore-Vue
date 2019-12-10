@@ -2,7 +2,8 @@ namespace JWTNetCoreVue
 {
   using System.Text;
   using JWTNetCoreVue.Security;
-  using JWTNetCoreVue.Services;
+  using JWTNetCoreVue.Services.Emails;
+  using JWTNetCoreVue.Services.Users;
   using JWTNetCoreVue.Settings;
   using Microsoft.AspNetCore.Authentication.JwtBearer;
   using Microsoft.AspNetCore.Builder;

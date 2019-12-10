@@ -7,7 +7,8 @@
   using JWTNetCoreVue.Entities.Users;
   using JWTNetCoreVue.Helpers;
   using JWTNetCoreVue.Models.Users;
-  using JWTNetCoreVue.Services;
+  using JWTNetCoreVue.Services.Emails;
+  using JWTNetCoreVue.Services.Users;
   using JWTNetCoreVue.Settings;
   using Microsoft.AspNetCore.Authorization;
   using Microsoft.AspNetCore.Mvc;

@@ -1,4 +1,4 @@
-﻿namespace JWTNetCoreVue.Services
+﻿namespace JWTNetCoreVue.Services.Emails
 {
   using System;
   using System.Reflection;
