@@ -8,6 +8,7 @@
     <Authors>JWTNetCoreVue</Authors>
     <Product>JWTNetCoreVue</Product>
     <AssemblyName>JWTNetCoreVue</AssemblyName>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
