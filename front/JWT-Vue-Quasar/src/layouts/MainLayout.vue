@@ -54,7 +54,7 @@
     >
       <q-list>
         <q-item-label header>JWT-NetCore-Vue</q-item-label>
-          <q-item clickable tag="a" target="_blank" href="https://github.quasar.dev">
+          <q-item clickable tag="a" target="_blank" href="https://github.com/Land3r/JWT-NetCore-Vue">
           <q-item-section avatar>
             <q-icon name="code" />
           </q-item-section>
